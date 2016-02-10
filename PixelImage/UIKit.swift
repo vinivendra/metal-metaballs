@@ -44,6 +44,8 @@ extension CGFloat: DoubleValuable {
     }
 }
 
+extension CGFloat: Numeric {}
+
 extension CGRect {
     var x: CGFloat {
         get { return origin.x }

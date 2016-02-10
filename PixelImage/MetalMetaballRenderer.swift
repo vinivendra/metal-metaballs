@@ -1,4 +1,3 @@
-// TODO: Remove references to view size from shader
 // TODO: Make shader ignore metaballs that are outside a certain area of tolerance (eg ±100 from borders)
 
 // TODO: Metaballs from texture to buffer
@@ -130,11 +129,20 @@ class MetalMetaballRenderer: MetaballRenderer {
 
     func metaballTexture(metaballs: [Metaball]) -> MTLTexture {
         // Create Float array for buffer
-        let floats: [Float] = metaballs.reduce([Float(metaballs.count)]) { (var array, metaball) -> [Float] in
-            array.append(Float(metaball.midX))
-            array.append(Float(metaball.midY))
+        // Exclude metaballs far from the view's bounds
+        let border: CGFloat = 100
+        var floats: [Float] = metaballs.reduce([Float(0)]) { (var array, metaball) -> [Float] in
+            let x = CGFloat(metaball.midX)
+            let y = CGFloat(metaball.midY)
+            if -border < x ≤ targetView.width + border &&
+               -border < y ≤ targetView.height + border {
+                array.append(Float(x))
+                array.append(Float(y))
+            }
             return array
         }
+        // Add array size to start of array so metal knows how far to go
+        floats[0] = Float(floats.count) / 2
 
         // Create texture
         let size = floats.count
