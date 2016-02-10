@@ -4,9 +4,17 @@ import UIKit
 class ImageMetaballRenderer: MetaballRenderer {
     typealias TargetView = UIImageView
 
-    func updateTargetView(imageView: TargetView, dataSource: MetaballDataSource) {
-        let width = Int(imageView.width)
-        let height = Int(imageView.height)
+    let targetView = TargetView()
+
+    let dataSource: MetaballDataSource
+
+    required init(dataSource: MetaballDataSource) {
+        self.dataSource = dataSource
+    }
+
+    func updateTargetView() {
+        let width = Int(targetView.width)
+        let height = Int(targetView.height)
         let metaballs = dataSource.metaballs
 
         let bytesPerPixel = 4;
@@ -57,7 +65,7 @@ class ImageMetaballRenderer: MetaballRenderer {
         
         let cgImage = CGBitmapContextCreateImage(context)
         let image = UIImage(CGImage: cgImage!)
-        imageView.image = image
+        targetView.image = image
     }
 }
 

@@ -8,11 +8,9 @@ protocol MetaballDataSource {
 protocol MetaballRenderer {
     typealias TargetView: UIView
 
-    func updateTargetView(targetView: TargetView, dataSource: MetaballDataSource)
-}
+    var targetView: TargetView { get }
 
-extension MetaballRenderer {
-    func createTargetView(frame frame: CGRect) -> TargetView {
-        return TargetView(frame: frame)
-    }
+    init(dataSource: MetaballDataSource)
+
+    func updateTargetView()
 }

@@ -8,7 +8,7 @@ class ViewController: UIViewController, MetaballDataSource {
     typealias TargetView = Renderer.TargetView
 
     var metaballView: TargetView!
-    let renderer = Renderer()
+    var renderer: Renderer!
 
     let width = 350
     let height = 600
@@ -21,6 +21,7 @@ class ViewController: UIViewController, MetaballDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        renderer = Renderer(dataSource: self)
 
         let recognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
         view.addGestureRecognizer(recognizer)
@@ -28,7 +29,8 @@ class ViewController: UIViewController, MetaballDataSource {
 
         let border = 20
         let metaballViewFrame = CGRect(x: border/2, y: border/2, width: width, height: height)
-        metaballView = renderer.createTargetView(frame: metaballViewFrame)
+        metaballView = renderer.targetView
+        metaballView.frame = metaballViewFrame
 
         let bigView = UIView(frame: CGRect(x: 10, y: 70, width: width + border, height: height + border))
         bigView.backgroundColor = UIColor.redColor()
@@ -41,7 +43,7 @@ class ViewController: UIViewController, MetaballDataSource {
         }
 
 
-        renderer.updateTargetView(metaballView, dataSource: self)
+        renderer.updateTargetView()
     }
 
     func handlePan(recognizer: UIPanGestureRecognizer) {
@@ -58,10 +60,10 @@ class ViewController: UIViewController, MetaballDataSource {
         selectedMetaball?.middle = location
 
         if recognizer.state == .Changed && dynamicRendering {
-            renderer.updateTargetView(metaballView, dataSource: self)
+            renderer.updateTargetView()
         }
         if recognizer.state == .Ended {
-            renderer.updateTargetView(metaballView, dataSource: self)
+            renderer.updateTargetView()
         }
     }
 }

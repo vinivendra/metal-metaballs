@@ -20,14 +20,22 @@ class MetalMetaballRenderer: MetaballRenderer {
 
     typealias TargetView = UIImageView
 
+    let targetView = TargetView()
+
     let context = MTLContext()
     var internalTexture: MTLTexture!
 
-    func updateTargetView(imageView: UIImageView, dataSource: MetaballDataSource) {
+    let dataSource: MetaballDataSource
+
+    required init(dataSource: MetaballDataSource) {
+        self.dataSource = dataSource
+    }
+
+    func updateTargetView() {
         let metaballs = dataSource.metaballs
 
-        let width = Int(imageView.width)
-        let height = Int(imageView.height)
+        let width = Int(targetView.width)
+        let height = Int(targetView.height)
 
         if internalTexture == nil {
             let textureDescriptor =
@@ -69,7 +77,7 @@ class MetalMetaballRenderer: MetaballRenderer {
             print("Error!")
         }
 
-        imageView.image = image(texture: internalTexture)
+        targetView.image = image(texture: internalTexture)
     }
 
     func image(texture texture: MTLTexture) -> UIImage {
