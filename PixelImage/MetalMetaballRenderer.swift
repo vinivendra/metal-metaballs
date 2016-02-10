@@ -1,5 +1,3 @@
-// TODO: Refactor update into 2 calls: metalRendering() and textureToImage()
-// TODO: Use async dispatch to free up main queue
 // TODO: Use two textures/images to alternate the 2 calls (like OpenGL double buffers)
 
 // TODO: Make graphics have edges only according to graph (instead of being a complete graph)
@@ -36,18 +34,24 @@ class MetalMetaballRenderer: MetaballRenderer {
     func updateTargetView() {
         let metaballs = dataSource.metaballs
 
-        // Re-alloc buffers if frame has changed
+        // Re-alloc buffers if the size has changed
         if previousSize != targetView.size {
             previousSize = targetView.size
             updateFrame()
         }
 
-        // Render graphics to metal texture
-        renderToRenderingTexture(metaballs: metaballs)
-        // Transform metal texture into image
-        let uiimage = image(texture: renderingTexture)
-        // Send image to view
-        targetView.image = uiimage
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) { () -> Void in
+
+            // Render graphics to metal texture
+            self.renderToRenderingTexture(metaballs: metaballs)
+            // Transform metal texture into image
+            let uiimage = self.image(texture: self.renderingTexture)
+
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                // Send image to view
+                self.targetView.image = uiimage
+            })
+        }
     }
 
     func renderToRenderingTexture(metaballs metaballs: [Metaball]) {
