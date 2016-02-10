@@ -1,5 +1,3 @@
-// TODO: Make shader ignore metaballs that are outside a certain area of tolerance (eg ±100 from borders)
-
 // TODO: Metaballs from texture to buffer
 // TODO: Use async dispatch to free up main queue
 // TODO: Refactor update into 2 calls: metalRendering() and textureToImage()
@@ -62,7 +60,7 @@ class MetalMetaballRenderer: MetaballRenderer {
                 height / threadGroupCounts.height, 1)
 
             // Create up-to-date metaball buffer
-            let metaballInfoTexture = metaballTexture(metaballs)
+            let metaballInfoBuffer = metaballBuffer(metaballs)
 
             // Send commands to metal and render
             let commandBuffer = context.commandQueue.commandBuffer()
@@ -70,7 +68,7 @@ class MetalMetaballRenderer: MetaballRenderer {
             let commandEncoder = commandBuffer.computeCommandEncoder()
             commandEncoder.setComputePipelineState(pipeline)
             commandEncoder.setTexture(renderingTexture, atIndex: 0)
-            commandEncoder.setTexture(metaballInfoTexture, atIndex: 1)
+            commandEncoder.setBuffer(metaballInfoBuffer, offset: 0, atIndex: 0)
             commandEncoder.dispatchThreadgroups(threadGroups,
                 threadsPerThreadgroup: threadGroupCounts)
             commandEncoder.endEncoding()
@@ -127,7 +125,7 @@ class MetalMetaballRenderer: MetaballRenderer {
         return image
     }
 
-    func metaballTexture(metaballs: [Metaball]) -> MTLTexture {
+    func metaballBuffer(metaballs: [Metaball]) -> MTLBuffer {
         // Create Float array for buffer
         // Exclude metaballs far from the view's bounds
         let border: CGFloat = 100
@@ -144,19 +142,10 @@ class MetalMetaballRenderer: MetaballRenderer {
         // Add array size to start of array so metal knows how far to go
         floats[0] = Float(floats.count) / 2
 
-        // Create texture
-        let size = floats.count
-        let textureDescriptor =
-        MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(
-            .R32Float, width: size, height: 1, mipmapped: false)
-        let texture = context.device.newTextureWithDescriptor(textureDescriptor)
+        // Create buffer
+        let buffer = context.device.newBufferWithBytes(floats, length: floats.count * sizeof(Float), options: .StorageModeShared)
 
-        // Copy array info into texture
-        let region = MTLRegionMake2D(0, 0, size, 1)
-        texture.replaceRegion(region, mipmapLevel: 0, withBytes: floats,
-            bytesPerRow: sizeof(Float) * size)
-        
-        return texture
+        return buffer
     }
 
     func updateFrame() {
