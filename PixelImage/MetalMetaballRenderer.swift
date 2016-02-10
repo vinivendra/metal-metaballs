@@ -66,7 +66,7 @@ class MetalMetaballRenderer: MetaballRenderer {
             // Create up-to-date metaball buffer
             let metaballInfoTexture = metaballTexture(metaballs)
 
-            //
+            // Send commands to metal and render
             let commandBuffer = context.commandQueue.commandBuffer()
 
             let commandEncoder = commandBuffer.computeCommandEncoder()
@@ -84,28 +84,32 @@ class MetalMetaballRenderer: MetaballRenderer {
             print("Error!")
         }
 
+        // Transform new metal texture into image
         targetView.image = image(texture: renderingTexture)
     }
 
     func image(texture texture: MTLTexture) -> UIImage {
+        // Get image info
         let imageSize = CGSizeMake(CGFloat(texture.width),
             CGFloat(texture.height))
         let width = Int(imageSize.width)
         let height = Int(imageSize.height)
         let imageByteCount = width * height * 4
+        let bytesPerRow = width * 4
+        let region = MTLRegionMake2D(0, 0, width, height)
 
+        // Allocate the buffer if needed
         if imageBuffer == nil {
             imageBuffer = malloc(imageByteCount)
         }
 
-        let bytesPerRow = width * 4
-        let region = MTLRegionMake2D(0, 0, width, height)
+        // Transfer texture info into image buffer
         texture.getBytes(imageBuffer, bytesPerRow: bytesPerRow,
             fromRegion: region, mipmapLevel: 0)
 
+        // Get info for UIImage
         let provider = CGDataProviderCreateWithData(nil, imageBuffer,
             imageByteCount, nil)
-
         let bitsPerComponent = 8
         let bitsperPixel = 32
         let colorSpaceRef = CGColorSpaceCreateDeviceRGB()
@@ -113,6 +117,8 @@ class MetalMetaballRenderer: MetaballRenderer {
             CGImageAlphaInfo.PremultipliedLast.rawValue |
                 CGBitmapInfo.ByteOrder32Big.rawValue)
         let renderingIntent = CGColorRenderingIntent.RenderingIntentDefault
+
+        // Create UIImage from image buffer
         let imageRef = CGImageCreate(width, height,
             bitsPerComponent, bitsperPixel, bytesPerRow,
             colorSpaceRef, bitmapInfo, provider,
@@ -124,21 +130,22 @@ class MetalMetaballRenderer: MetaballRenderer {
     }
 
     func metaballTexture(metaballs: [Metaball]) -> MTLTexture {
+        // Create Float array for buffer
         let floats: [Float] = metaballs.reduce([Float(metaballs.count)]) { (var array, metaball) -> [Float] in
             array.append(Float(metaball.midX))
             array.append(Float(metaball.midY))
             return array
         }
-        let size = floats.count
 
+        // Create texture
+        let size = floats.count
         let textureDescriptor =
         MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(
             .R32Float, width: size, height: 1, mipmapped: false)
-
         let texture = context.device.newTextureWithDescriptor(textureDescriptor)
 
+        // Copy array info into texture
         let region = MTLRegionMake2D(0, 0, size, 1)
-        
         texture.replaceRegion(region, mipmapLevel: 0, withBytes: floats,
             bytesPerRow: sizeof(Float) * size)
         
@@ -155,6 +162,4 @@ class MetalMetaballRenderer: MetaballRenderer {
     deinit {
         free(imageBuffer)
     }
-
 }
-
