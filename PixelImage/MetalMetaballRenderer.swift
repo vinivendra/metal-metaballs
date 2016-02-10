@@ -123,7 +123,7 @@ class MetalMetaballRenderer: MetaballRenderer {
             colorSpaceRef, bitmapInfo, provider,
             nil, false, renderingIntent)
         let image = UIImage(CGImage: imageRef!, scale: 0.0,
-            orientation: UIImageOrientation.DownMirrored)
+            orientation: UIImageOrientation.Up)
 
         return image
     }

@@ -17,10 +17,10 @@ kernel void
     for (char i = 1; i < metaballArraySize; i += 2) {
         for (char j = i + 2; j < metaballArraySize; j += 2) {
             float2 metaball1 = float2(metaballTexture.read(i)[0],
-                                      600 - metaballTexture.read(i + 1)[0]);
+                                      metaballTexture.read(i + 1)[0]);
 
             float2 metaball2 = float2(metaballTexture.read(j)[0],
-                                      600 - metaballTexture.read(j + 1)[0]);
+                                      metaballTexture.read(j + 1)[0]);
 
             float2 metaball1Vector
                 = float2(metaball1.x - gid.x, metaball1.y - gid.y);
