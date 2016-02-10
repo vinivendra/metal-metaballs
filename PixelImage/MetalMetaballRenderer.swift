@@ -36,11 +36,21 @@ class MetalMetaballRenderer: MetaballRenderer {
     func updateTargetView() {
         let metaballs = dataSource.metaballs
 
+        // Re-alloc buffers if frame has changed
         if previousFrame != targetView.frame {
             previousFrame = targetView.frame
             updateFrame()
         }
 
+        // Render graphics to metal texture
+        renderToRenderingTexture(metaballs: metaballs)
+        // Transform metal texture into image
+        let uiimage = image(texture: renderingTexture)
+        // Send image to view
+        targetView.image = uiimage
+    }
+
+    func renderToRenderingTexture(metaballs metaballs: [Metaball]) {
         let width = Int(targetView.width)
         let height = Int(targetView.height)
 
@@ -79,13 +89,10 @@ class MetalMetaballRenderer: MetaballRenderer {
 
             commandBuffer.commit()
             commandBuffer.waitUntilCompleted()
-
+            
         } catch _ {
             print("Error!")
         }
-
-        // Transform new metal texture into image
-        targetView.image = image(texture: renderingTexture)
     }
 
     func image(texture texture: MTLTexture) -> UIImage {
