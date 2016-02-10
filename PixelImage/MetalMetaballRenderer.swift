@@ -1,5 +1,5 @@
-// TODO: Use async dispatch to free up main queue
 // TODO: Refactor update into 2 calls: metalRendering() and textureToImage()
+// TODO: Use async dispatch to free up main queue
 // TODO: Use two textures/images to alternate the 2 calls (like OpenGL double buffers)
 
 // TODO: Make graphics have edges only according to graph (instead of being a complete graph)
