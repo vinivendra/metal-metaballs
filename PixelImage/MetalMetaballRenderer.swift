@@ -1,6 +1,11 @@
-// TODO: Render metaballs on layer/view instead of image
+// TODO: Optimize resources (don't allocate textures and images every frame)
 // TODO: Remove references to view size from shader
 // TODO: Make shader ignore metaballs that are outside a certain area of tolerance (eg ±100 from borders)
+
+// TODO: Metaballs from texture to buffer
+// TODO: Use async dispatch to free up main queue
+// TODO: Refactor update into 2 calls: metalRendering() and textureToImage()
+// TODO: Use two textures/images to alternate the 2 calls (like OpenGL double buffers)
 
 // TODO: Make graphics have edges only according to graph (instead of being a complete graph)
 
@@ -16,30 +21,34 @@ class MetalMetaballRenderer: MetaballRenderer {
     typealias TargetView = UIImageView
 
     static let context = MTLContext()
+    static var internalTexture: MTLTexture!
 
     static func updateTargetView(imageView: UIImageView, dataSource: MetaballDataSource) {
         let metaballs = dataSource.metaballs
 
-        let kernelFunction: MTLFunction?
-        let pipeline: MTLComputePipelineState
-        var internalTexture: MTLTexture! = nil
+        let width = Int(imageView.width)
+        let height = Int(imageView.height)
 
-        do {
-            kernelFunction = context.library.newFunctionWithName("drawMetaballs")
-            pipeline = try context.device.newComputePipelineStateWithFunction(kernelFunction!)
-
-            let width = Int(imageView.width)
-            let height = Int(imageView.height)
-
+        if internalTexture == nil {
             let textureDescriptor =
             MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(.BGRA8Unorm, width: width, height: height, mipmapped: false)
 
             internalTexture = context.device.newTextureWithDescriptor(textureDescriptor)
+        }
+
+        let kernelFunction: MTLFunction?
+        let pipeline: MTLComputePipelineState
+        do {
+            // Get long-lived objects
+            kernelFunction = context.library.newFunctionWithName("drawMetaballs")
+            pipeline = try context.device.newComputePipelineStateWithFunction(kernelFunction!)
+
+            // Configure info for computing
             let threadGroupCounts = MTLSizeMake(8, 8, 1)
             let threadGroups = MTLSizeMake(width / threadGroupCounts.width,
                 height / threadGroupCounts.height, 1)
 
-            //
+            // Create up-to-date metaball buffer
             let metaballInfoTexture = metaballTexture(metaballs)
 
             //
