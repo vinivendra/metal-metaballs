@@ -21,7 +21,7 @@ class MetalMetaballRenderer: MetaballRenderer {
     }
 
     let targetView = TargetView()
-    var previousFrame = CGRect.zero
+    var previousSize = CGSize.zero
 
     let context = MTLContext()
     var renderingTexture: MTLTexture!
@@ -37,8 +37,8 @@ class MetalMetaballRenderer: MetaballRenderer {
         let metaballs = dataSource.metaballs
 
         // Re-alloc buffers if frame has changed
-        if previousFrame != targetView.frame {
-            previousFrame = targetView.frame
+        if previousSize != targetView.size {
+            previousSize = targetView.size
             updateFrame()
         }
 
