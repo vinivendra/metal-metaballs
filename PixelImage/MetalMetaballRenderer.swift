@@ -1,4 +1,3 @@
-// TODO: Optimize resources (don't allocate textures and images every frame)
 // TODO: Remove references to view size from shader
 // TODO: Make shader ignore metaballs that are outside a certain area of tolerance (eg ±100 from borders)
 
