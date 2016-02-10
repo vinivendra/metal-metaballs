@@ -9,6 +9,14 @@
 import Metal
 import UIKit
 
+class TextureRef {
+    var texture: MTLTexture
+
+    init(texture: MTLTexture) {
+        self.texture = texture
+    }
+}
+
 class MetalMetaballRenderer: MetaballRenderer {
 
     typealias TargetView = UIImageView
@@ -22,17 +30,19 @@ class MetalMetaballRenderer: MetaballRenderer {
     var previousSize = CGSize.zero
 
     let context = MTLContext()
-    var renderingTexture: MTLTexture!
+    var renderingTexture: TextureRef!
     var imageBuffer: UnsafeMutablePointer<Void>!
 
     let dataSource: MetaballDataSource
+
+    var dirty = false
+    var metalIsBusy = false
 
     required init(dataSource: MetaballDataSource) {
         self.dataSource = dataSource
     }
 
     func updateTargetView() {
-        let metaballs = dataSource.metaballs
 
         // Re-alloc buffers if the size has changed
         if previousSize != targetView.size {
@@ -40,21 +50,36 @@ class MetalMetaballRenderer: MetaballRenderer {
             updateFrame()
         }
 
+        if metalIsBusy {
+            dirty = true
+            return
+        } else {
+            metalIsBusy = true
+            dirty = false
+        }
+
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) { () -> Void in
 
             // Render graphics to metal texture
-            self.renderToRenderingTexture(metaballs: metaballs)
+            self.renderToRenderingTexture()
+            self.metalIsBusy = false
+
             // Transform metal texture into image
-            let uiimage = self.image(texture: self.renderingTexture)
+            let uiimage = self.image(texture: self.renderingTexture.texture)
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 // Send image to view
                 self.targetView.image = uiimage
+
+                // If the image is dirty, update it
+                if self.dirty {
+                    self.updateTargetView()
+                }
             })
         }
     }
 
-    func renderToRenderingTexture(metaballs metaballs: [Metaball]) {
+    func renderToRenderingTexture() {
         let width = Int(targetView.width)
         let height = Int(targetView.height)
 
@@ -62,7 +87,7 @@ class MetalMetaballRenderer: MetaballRenderer {
             let textureDescriptor =
             MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(.BGRA8Unorm, width: width, height: height, mipmapped: false)
 
-            renderingTexture = context.device.newTextureWithDescriptor(textureDescriptor)
+            renderingTexture = TextureRef(texture: context.device.newTextureWithDescriptor(textureDescriptor))
         }
 
         let kernelFunction: MTLFunction?
@@ -77,15 +102,13 @@ class MetalMetaballRenderer: MetaballRenderer {
             let threadGroups = MTLSizeMake(width / threadGroupCounts.width,
                 height / threadGroupCounts.height, 1)
 
-            // Create up-to-date metaball buffer
-            let metaballInfoBuffer = metaballBuffer(metaballs)
-
             // Send commands to metal and render
             let commandBuffer = context.commandQueue.commandBuffer()
 
             let commandEncoder = commandBuffer.computeCommandEncoder()
             commandEncoder.setComputePipelineState(pipeline)
-            commandEncoder.setTexture(renderingTexture, atIndex: 0)
+            commandEncoder.setTexture(renderingTexture.texture, atIndex: 0)
+            let metaballInfoBuffer = metaballBuffer()
             commandEncoder.setBuffer(metaballInfoBuffer, offset: 0, atIndex: 0)
             commandEncoder.dispatchThreadgroups(threadGroups,
                 threadsPerThreadgroup: threadGroupCounts)
@@ -140,10 +163,11 @@ class MetalMetaballRenderer: MetaballRenderer {
         return image
     }
 
-    func metaballBuffer(metaballs: [Metaball]) -> MTLBuffer {
+    func metaballBuffer() -> MTLBuffer {
         // Create Float array for buffer
         // Exclude metaballs far from the view's bounds
         let border: CGFloat = 100
+        let metaballs = self.dataSource.metaballs
         var floats: [Float] = metaballs.reduce([Float(0)]) { (var array, metaball) -> [Float] in
             let x = CGFloat(metaball.midX)
             let y = CGFloat(metaball.midY)
