@@ -21,9 +21,11 @@ class MetalMetaballRenderer: MetaballRenderer {
     typealias TargetView = UIImageView
 
     let targetView = TargetView()
+    var previousFrame = CGRect.zero
 
     let context = MTLContext()
-    var internalTexture: MTLTexture!
+    var renderingTexture: MTLTexture!
+    var imageBuffer: UnsafeMutablePointer<Void>!
 
     let dataSource: MetaballDataSource
 
@@ -34,14 +36,19 @@ class MetalMetaballRenderer: MetaballRenderer {
     func updateTargetView() {
         let metaballs = dataSource.metaballs
 
+        if previousFrame != targetView.frame {
+            previousFrame = targetView.frame
+            updateFrame()
+        }
+
         let width = Int(targetView.width)
         let height = Int(targetView.height)
 
-        if internalTexture == nil {
+        if renderingTexture == nil {
             let textureDescriptor =
             MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(.BGRA8Unorm, width: width, height: height, mipmapped: false)
 
-            internalTexture = context.device.newTextureWithDescriptor(textureDescriptor)
+            renderingTexture = context.device.newTextureWithDescriptor(textureDescriptor)
         }
 
         let kernelFunction: MTLFunction?
@@ -64,7 +71,7 @@ class MetalMetaballRenderer: MetaballRenderer {
 
             let commandEncoder = commandBuffer.computeCommandEncoder()
             commandEncoder.setComputePipelineState(pipeline)
-            commandEncoder.setTexture(internalTexture, atIndex: 0)
+            commandEncoder.setTexture(renderingTexture, atIndex: 0)
             commandEncoder.setTexture(metaballInfoTexture, atIndex: 1)
             commandEncoder.dispatchThreadgroups(threadGroups,
                 threadsPerThreadgroup: threadGroupCounts)
@@ -77,28 +84,27 @@ class MetalMetaballRenderer: MetaballRenderer {
             print("Error!")
         }
 
-        targetView.image = image(texture: internalTexture)
+        targetView.image = image(texture: renderingTexture)
     }
 
     func image(texture texture: MTLTexture) -> UIImage {
         let imageSize = CGSizeMake(CGFloat(texture.width),
             CGFloat(texture.height))
-
         let width = Int(imageSize.width)
         let height = Int(imageSize.height)
-
         let imageByteCount = width * height * 4
-        let imageBytes = malloc(imageByteCount)
+
+        if imageBuffer == nil {
+            imageBuffer = malloc(imageByteCount)
+        }
+
         let bytesPerRow = width * 4
         let region = MTLRegionMake2D(0, 0, width, height)
-        texture.getBytes(imageBytes, bytesPerRow: bytesPerRow,
+        texture.getBytes(imageBuffer, bytesPerRow: bytesPerRow,
             fromRegion: region, mipmapLevel: 0)
 
-        let provider = CGDataProviderCreateWithData(nil, imageBytes,
-            imageByteCount) {
-                (_, data, _) -> Void in
-                free(UnsafeMutablePointer<Void>(data))
-        }
+        let provider = CGDataProviderCreateWithData(nil, imageBuffer,
+            imageByteCount, nil)
 
         let bitsPerComponent = 8
         let bitsperPixel = 32
@@ -138,6 +144,17 @@ class MetalMetaballRenderer: MetaballRenderer {
         
         return texture
     }
-    
+
+    func updateFrame() {
+        if imageBuffer != nil {
+            free(imageBuffer)
+        }
+        imageBuffer = nil
+    }
+
+    deinit {
+        free(imageBuffer)
+    }
+
 }
 
