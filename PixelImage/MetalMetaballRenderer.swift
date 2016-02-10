@@ -20,10 +20,10 @@ class MetalMetaballRenderer: MetaballRenderer {
 
     typealias TargetView = UIImageView
 
-    static let context = MTLContext()
-    static var internalTexture: MTLTexture!
+    let context = MTLContext()
+    var internalTexture: MTLTexture!
 
-    static func updateTargetView(imageView: UIImageView, dataSource: MetaballDataSource) {
+    func updateTargetView(imageView: UIImageView, dataSource: MetaballDataSource) {
         let metaballs = dataSource.metaballs
 
         let width = Int(imageView.width)
@@ -72,7 +72,7 @@ class MetalMetaballRenderer: MetaballRenderer {
         imageView.image = image(texture: internalTexture)
     }
 
-    static func image(texture texture: MTLTexture) -> UIImage {
+    func image(texture texture: MTLTexture) -> UIImage {
         let imageSize = CGSizeMake(CGFloat(texture.width),
             CGFloat(texture.height))
 
@@ -109,7 +109,7 @@ class MetalMetaballRenderer: MetaballRenderer {
         return image
     }
 
-    static func metaballTexture(metaballs: [Metaball]) -> MTLTexture {
+    func metaballTexture(metaballs: [Metaball]) -> MTLTexture {
         let floats: [Float] = metaballs.reduce([Float(metaballs.count)]) { (var array, metaball) -> [Float] in
             array.append(Float(metaball.midX))
             array.append(Float(metaball.midY))

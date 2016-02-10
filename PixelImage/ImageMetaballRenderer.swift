@@ -4,7 +4,7 @@ import UIKit
 class ImageMetaballRenderer: MetaballRenderer {
     typealias TargetView = UIImageView
 
-    static func updateTargetView(imageView: TargetView, dataSource: MetaballDataSource) {
+    func updateTargetView(imageView: TargetView, dataSource: MetaballDataSource) {
         let width = Int(imageView.width)
         let height = Int(imageView.height)
         let metaballs = dataSource.metaballs
