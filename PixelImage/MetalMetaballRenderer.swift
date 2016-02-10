@@ -15,6 +15,11 @@ class MetalMetaballRenderer: MetaballRenderer {
 
     typealias TargetView = UIImageView
 
+    var supportsDynamicRendering: Bool { get {
+        return true
+        }
+    }
+
     let targetView = TargetView()
     var previousFrame = CGRect.zero
 

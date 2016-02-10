@@ -9,6 +9,7 @@ protocol MetaballRenderer {
     typealias TargetView: UIView
 
     var targetView: TargetView { get }
+    var supportsDynamicRendering: Bool { get }
 
     init(dataSource: MetaballDataSource)
 

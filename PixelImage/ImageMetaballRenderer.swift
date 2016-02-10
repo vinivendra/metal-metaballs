@@ -2,7 +2,13 @@
 import UIKit
 
 class ImageMetaballRenderer: MetaballRenderer {
+    
     typealias TargetView = UIImageView
+
+    var supportsDynamicRendering: Bool { get {
+        return false
+        }
+    }
 
     let targetView = TargetView()
 
