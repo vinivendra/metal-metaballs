@@ -3,7 +3,6 @@ import UIKit
 
 class ViewController: UIViewController, MetaballDataSource {
 
-    let dynamicRendering = true
     typealias Renderer = MetalMetaballRenderer // ImageMetaballRenderer // MetalMetaballRenderer
     typealias TargetView = Renderer.TargetView
 
@@ -59,7 +58,7 @@ class ViewController: UIViewController, MetaballDataSource {
 
         selectedMetaball?.middle = location
 
-        if recognizer.state == .Changed && dynamicRendering {
+        if recognizer.state == .Changed && renderer.supportsDynamicRendering {
             renderer.updateTargetView()
         }
         if recognizer.state == .Ended {
