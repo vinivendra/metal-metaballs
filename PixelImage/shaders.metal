@@ -44,7 +44,7 @@ kernel void
         }
     }
 
-    float result = sum;
+    float result = mix(0.0, 1.0, step(0.4, sum));
 
     outTexture.write(float4(result, result / 2, 0, 1), gid);
 }

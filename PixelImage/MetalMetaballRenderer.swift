@@ -1,4 +1,3 @@
-// TODO: Metaballs from texture to buffer
 // TODO: Use async dispatch to free up main queue
 // TODO: Refactor update into 2 calls: metalRendering() and textureToImage()
 // TODO: Use two textures/images to alternate the 2 calls (like OpenGL double buffers)
