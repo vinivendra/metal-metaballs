@@ -22,11 +22,9 @@ class MetalMetaballRenderer: MetaballRenderer {
     }
 
     let targetView = TargetView()
-    var previousSize = CGSize.zero
 
     let context = MTLContext()
-    var renderingTexture: MTLTexture!
-    var imageBuffer: UnsafeMutablePointer<Void>!
+    var computeContext: MTLComputeContext!
 
     let dataSource: MetaballDataSource
 
@@ -59,12 +57,6 @@ class MetalMetaballRenderer: MetaballRenderer {
 
         state = .Ending
 
-        // Re-alloc buffers if the size has changed
-        if previousSize != targetView.size {
-            previousSize = targetView.size
-            updateFrame()
-        }
-
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) { () -> Void in
 
             // Render graphics to metal texture
@@ -90,11 +82,12 @@ class MetalMetaballRenderer: MetaballRenderer {
         let width = Int(targetView.width)
         let height = Int(targetView.height)
 
-        if renderingTexture == nil {
+        if computeContext == nil {
             let textureDescriptor =
             MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(.BGRA8Unorm, width: width, height: height, mipmapped: false)
 
-            renderingTexture = context.device.newTextureWithDescriptor(textureDescriptor)
+            let texture = context.device.newTextureWithDescriptor(textureDescriptor)
+            computeContext = MTLComputeContext(size: targetView.size, texture: texture)
         }
 
         let kernelFunction: MTLFunction?
@@ -114,7 +107,7 @@ class MetalMetaballRenderer: MetaballRenderer {
 
             let commandEncoder = commandBuffer.computeCommandEncoder()
             commandEncoder.setComputePipelineState(pipeline)
-            commandEncoder.setTexture(renderingTexture, atIndex: 0)
+            commandEncoder.setTexture(computeContext.texture, atIndex: 0)
             let metaballInfoBuffer = metaballBuffer()
             commandEncoder.setBuffer(metaballInfoBuffer, offset: 0, atIndex: 0)
             commandEncoder.dispatchThreadgroups(threadGroups,
@@ -130,7 +123,7 @@ class MetalMetaballRenderer: MetaballRenderer {
     }
 
     func createImageFromTexture() -> UIImage {
-        let texture = renderingTexture
+        let texture = computeContext.texture
 
         // Get image info
         let imageSize = CGSizeMake(CGFloat(texture.width),
@@ -142,16 +135,16 @@ class MetalMetaballRenderer: MetaballRenderer {
         let region = MTLRegionMake2D(0, 0, width, height)
 
         // Allocate the buffer if needed
-        if imageBuffer == nil {
-            imageBuffer = malloc(imageByteCount)
+        if computeContext.imageBuffer == nil {
+            computeContext.imageBuffer = malloc(imageByteCount)
         }
 
         // Transfer texture info into image buffer
-        texture.getBytes(imageBuffer, bytesPerRow: bytesPerRow,
+        texture.getBytes(computeContext.imageBuffer, bytesPerRow: bytesPerRow,
             fromRegion: region, mipmapLevel: 0)
 
         // Get info for UIImage
-        let provider = CGDataProviderCreateWithData(nil, imageBuffer,
+        let provider = CGDataProviderCreateWithData(nil, computeContext.imageBuffer,
             imageByteCount, nil)
         let bitsPerComponent = 8
         let bitsperPixel = 32
@@ -194,16 +187,5 @@ class MetalMetaballRenderer: MetaballRenderer {
         let buffer = context.device.newBufferWithBytes(floats, length: floats.count * sizeof(Float), options: .StorageModeShared)
         
         return buffer
-    }
-    
-    func updateFrame() {
-        if imageBuffer != nil {
-            free(imageBuffer)
-        }
-        imageBuffer = nil
-    }
-    
-    deinit {
-        free(imageBuffer)
     }
 }
