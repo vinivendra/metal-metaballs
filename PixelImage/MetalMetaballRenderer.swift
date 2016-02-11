@@ -1,5 +1,3 @@
-// TOOD: Use two compute contexts and double recursion
-
 // TODO: Make graphics have edges only according to graph (instead of being a complete graph)
 
 // TODO: Interpolate metaball colors
