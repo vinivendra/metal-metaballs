@@ -18,7 +18,8 @@ class MetalMetaballRenderer {
     let targetView: TargetView
 
     let context = MTLContext()
-    var computeContext: MTLComputeContext
+    var activeComputeContext: MTLComputeContext
+    var idleComputeContext: MTLComputeContext
 
     let dataSource: MetaballDataSource
 
@@ -50,8 +51,11 @@ class MetalMetaballRenderer {
         let height = Int(frame.height)
         let textureDescriptor =
         MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(.BGRA8Unorm, width: width, height: height, mipmapped: false)
-        let texture = context.device.newTextureWithDescriptor(textureDescriptor)
-        computeContext = MTLComputeContext(size: targetView.size, texture: texture)
+
+        let texture1 = context.device.newTextureWithDescriptor(textureDescriptor)
+        activeComputeContext = MTLComputeContext(size: targetView.size, texture: texture1)
+        let texture2 = context.device.newTextureWithDescriptor(textureDescriptor)
+        idleComputeContext = MTLComputeContext(size: targetView.size, texture: texture2)
     }
 
     func updateTargetView() {
@@ -62,11 +66,14 @@ class MetalMetaballRenderer {
 
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) { () -> Void in
 
+            let computeContext = self.activeComputeContext
+            swap(&self.activeComputeContext, &self.idleComputeContext)
+
             // Render graphics to metal texture
-            self.renderToContext(self.computeContext)
+            self.renderToContext(computeContext)
 
             // Transform metal texture into image
-            let uiimage = self.createImageFromContext(self.computeContext)
+            let uiimage = self.createImageFromContext(computeContext)
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 // Send image to view
