@@ -3,11 +3,8 @@ import UIKit
 
 class ViewController: UIViewController, MetaballDataSource {
 
-    let dynamicRendering = true
-    typealias Renderer = MetalMetaballRenderer // ImageMetaballRenderer // MetalMetaballRenderer
-    typealias TargetView = Renderer.TargetView
-
-    var metaballView: TargetView!
+    var metaballView: UIImageView!
+    var renderer: MetalMetaballRenderer!
 
     let width = 350
     let height = 600
@@ -17,50 +14,50 @@ class ViewController: UIViewController, MetaballDataSource {
     }
     var previousLocation: CGPoint!
 
+    var selectedMetaball: Metaball?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
 
         let recognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
         view.addGestureRecognizer(recognizer)
 
-
         let border = 20
         let metaballViewFrame = CGRect(x: border/2, y: border/2, width: width, height: height)
-        metaballView = Renderer.createTargetView(frame: metaballViewFrame)
+        renderer = MetalMetaballRenderer(dataSource: self, frame: metaballViewFrame)
+        metaballView = renderer.targetView
 
         let bigView = UIView(frame: CGRect(x: 10, y: 70, width: width + border, height: height + border))
         bigView.backgroundColor = UIColor.redColor()
         bigView.addSubview(metaballView)
         view.addSubview(bigView)
 
-
         for metaball in metaballs {
             metaballView.addSubview(metaball)
         }
 
-
-        Renderer.updateTargetView(metaballView, dataSource: self)
+        renderer.state = .Running
     }
 
     func handlePan(recognizer: UIPanGestureRecognizer) {
         let location = recognizer.locationInView(metaballView)
 
-        var selectedMetaball: UIView?
-
-        for metaball in metaballs where
-            abs(metaball.midX - location.x) < 50 && abs(metaball.midY - location.y) < 50 {
-                selectedMetaball = metaball
-                break
+        if selectedMetaball == nil {
+            for metaball in metaballs where
+                abs(metaball.midX - location.x) < 50 && abs(metaball.midY - location.y) < 50 {
+                    selectedMetaball = metaball
+                    break
+            }
         }
+
+        guard selectedMetaball != nil else { return }
 
         selectedMetaball?.middle = location
 
-        if recognizer.state == .Changed && dynamicRendering {
-            Renderer.updateTargetView(metaballView, dataSource: self)
-        }
+        renderer.state = .Running
+
         if recognizer.state == .Ended {
-            Renderer.updateTargetView(metaballView, dataSource: self)
+            selectedMetaball = nil
         }
     }
 }

@@ -5,22 +5,21 @@ using namespace metal;
 
 kernel void
     drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)]],
-                  texture2d<float, access::read>
-                      metaballTexture[[texture(1)]],
+                  constant float *metaballBuffer [[buffer(0)]],
                   uint2 gid[[thread_position_in_grid]]) {
 
-    char numberOfMetaballs = metaballTexture.read(0)[0];
+    char numberOfMetaballs = metaballBuffer[0];
     char metaballArraySize = numberOfMetaballs * 2 + 1;
 
     float sum = 0;
 
     for (char i = 1; i < metaballArraySize; i += 2) {
         for (char j = i + 2; j < metaballArraySize; j += 2) {
-            float2 metaball1 = float2(metaballTexture.read(i)[0],
-                                      600 - metaballTexture.read(i + 1)[0]);
+            float2 metaball1 = float2(metaballBuffer[i],
+                                      metaballBuffer[i + 1]);
 
-            float2 metaball2 = float2(metaballTexture.read(j)[0],
-                                      600 - metaballTexture.read(j + 1)[0]);
+            float2 metaball2 = float2(metaballBuffer[j],
+                                      metaballBuffer[j + 1]);
 
             float2 metaball1Vector
                 = float2(metaball1.x - gid.x, metaball1.y - gid.y);
@@ -45,7 +44,7 @@ kernel void
         }
     }
 
-    float result = sum;
+    float result = mix(0.0, 1.0, step(0.4, sum));
 
     outTexture.write(float4(result, result / 2, 0, 1), gid);
 }

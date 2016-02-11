@@ -13,13 +13,12 @@
 		2426868F1C63B72A00D62456 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2426868E1C63B72A00D62456 /* Assets.xcassets */; };
 		242686921C63B72A00D62456 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 242686901C63B72A00D62456 /* LaunchScreen.storyboard */; };
 		24E1E7D71C67C8B200ECF1C4 /* UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7D61C67C8B200ECF1C4 /* UIKit.swift */; };
-		24E1E7D91C67C9C900ECF1C4 /* MetaballRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7D81C67C9C900ECF1C4 /* MetaballRenderer.swift */; };
-		24E1E7DB1C67CA3600ECF1C4 /* ImageMetaballRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7DA1C67CA3600ECF1C4 /* ImageMetaballRenderer.swift */; };
 		24E1E7E21C67D37F00ECF1C4 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24E1E7E11C67D37F00ECF1C4 /* Metal.framework */; };
 		24E1E7E41C67D39300ECF1C4 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24E1E7E31C67D39300ECF1C4 /* MetalKit.framework */; };
 		24E1E7EB1C67D70300ECF1C4 /* MetalMetaballRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7EA1C67D70300ECF1C4 /* MetalMetaballRenderer.swift */; };
 		24E1E7F01C67D74300ECF1C4 /* Metal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7EE1C67D74300ECF1C4 /* Metal.swift */; };
 		24E1E7F11C67D74300ECF1C4 /* shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7EF1C67D74300ECF1C4 /* shaders.metal */; };
+		24ED21CD1C6C2397009C40FC /* MetaballDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */; };
 		24FFA86B1C6BA038005ACD60 /* ApproximationOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA84C1C6BA038005ACD60 /* ApproximationOperator.swift */; };
 		24FFA86C1C6BA038005ACD60 /* Collections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA84D1C6BA038005ACD60 /* Collections.swift */; };
 		24FFA86D1C6BA038005ACD60 /* ComparatorChains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA84E1C6BA038005ACD60 /* ComparatorChains.swift */; };
@@ -59,13 +58,12 @@
 		242686911C63B72A00D62456 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		242686931C63B72A00D62456 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24E1E7D61C67C8B200ECF1C4 /* UIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKit.swift; sourceTree = "<group>"; };
-		24E1E7D81C67C9C900ECF1C4 /* MetaballRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaballRenderer.swift; sourceTree = "<group>"; };
-		24E1E7DA1C67CA3600ECF1C4 /* ImageMetaballRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageMetaballRenderer.swift; sourceTree = "<group>"; };
 		24E1E7E11C67D37F00ECF1C4 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		24E1E7E31C67D39300ECF1C4 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		24E1E7EA1C67D70300ECF1C4 /* MetalMetaballRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalMetaballRenderer.swift; sourceTree = "<group>"; };
 		24E1E7EE1C67D74300ECF1C4 /* Metal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metal.swift; sourceTree = "<group>"; };
 		24E1E7EF1C67D74300ECF1C4 /* shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = shaders.metal; sourceTree = "<group>"; };
+		24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaballDataSource.swift; sourceTree = "<group>"; };
 		24FFA84C1C6BA038005ACD60 /* ApproximationOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApproximationOperator.swift; sourceTree = "<group>"; };
 		24FFA84D1C6BA038005ACD60 /* Collections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collections.swift; sourceTree = "<group>"; };
 		24FFA84E1C6BA038005ACD60 /* ComparatorChains.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComparatorChains.swift; sourceTree = "<group>"; };
@@ -134,8 +132,7 @@
 				242686871C63B72A00D62456 /* AppDelegate.swift */,
 				242686891C63B72A00D62456 /* ViewController.swift */,
 				24E1E7D61C67C8B200ECF1C4 /* UIKit.swift */,
-				24E1E7D81C67C9C900ECF1C4 /* MetaballRenderer.swift */,
-				24E1E7DA1C67CA3600ECF1C4 /* ImageMetaballRenderer.swift */,
+				24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */,
 				24E1E7EA1C67D70300ECF1C4 /* MetalMetaballRenderer.swift */,
 				24E1E7EE1C67D74300ECF1C4 /* Metal.swift */,
 				24E1E7EF1C67D74300ECF1C4 /* shaders.metal */,
@@ -289,13 +286,13 @@
 				24FFA8861C6BA038005ACD60 /* TestCommons.swift in Sources */,
 				24FFA8741C6BA038005ACD60 /* SignOperator.swift in Sources */,
 				24FFA8821C6BA038005ACD60 /* ScanReduce.swift in Sources */,
+				24ED21CD1C6C2397009C40FC /* MetaballDataSource.swift in Sources */,
 				24FFA8831C6BA038005ACD60 /* Slicing.swift in Sources */,
 				24FFA8721C6BA038005ACD60 /* Sequence.swift in Sources */,
 				24FFA87F1C6BA038005ACD60 /* Iterate.swift in Sources */,
 				24FFA8761C6BA038005ACD60 /* Categorise.swift in Sources */,
 				24FFA86D1C6BA038005ACD60 /* ComparatorChains.swift in Sources */,
 				24FFA8711C6BA038005ACD60 /* PowerOperator.swift in Sources */,
-				24E1E7D91C67C9C900ECF1C4 /* MetaballRenderer.swift in Sources */,
 				24E1E7D71C67C8B200ECF1C4 /* UIKit.swift in Sources */,
 				24FFA8851C6BA038005ACD60 /* Zip.swift in Sources */,
 				24FFA8791C6BA038005ACD60 /* Cycle.swift in Sources */,
@@ -304,7 +301,6 @@
 				24FFA87D1C6BA038005ACD60 /* Hopping.swift in Sources */,
 				24E1E7EB1C67D70300ECF1C4 /* MetalMetaballRenderer.swift in Sources */,
 				24FFA87A1C6BA038005ACD60 /* Enumerate.swift in Sources */,
-				24E1E7DB1C67CA3600ECF1C4 /* ImageMetaballRenderer.swift in Sources */,
 				242686881C63B72A00D62456 /* AppDelegate.swift in Sources */,
 				24E1E7F01C67D74300ECF1C4 /* Metal.swift in Sources */,
 				24FFA87C1C6BA038005ACD60 /* FlatMap.swift in Sources */,
