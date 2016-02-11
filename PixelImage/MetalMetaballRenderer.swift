@@ -15,11 +15,6 @@ class MetalMetaballRenderer {
 
     typealias TargetView = UIImageView
 
-    var supportsDynamicRendering: Bool { get {
-        return true
-        }
-    }
-
     let targetView: TargetView
 
     let context = MTLContext()
