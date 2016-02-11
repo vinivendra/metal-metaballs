@@ -1,4 +1,7 @@
-// TODO: Use two textures/images to alternate the 2 calls (like OpenGL double buffers)
+// TODO: Create state machine
+// TODO: Make draw calls auto-loop, conditioned to the state machine
+// TODO: Create compute context to contain texture and imageBuffer
+// TOOD: Use two compute contexts and double recursion
 
 // TODO: Make graphics have edges only according to graph (instead of being a complete graph)
 
