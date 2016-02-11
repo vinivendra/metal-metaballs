@@ -36,13 +36,11 @@ class ViewController: UIViewController, MetaballDataSource {
         bigView.addSubview(metaballView)
         view.addSubview(bigView)
 
-
         for metaball in metaballs {
             metaballView.addSubview(metaball)
         }
 
-
-        renderer.updateTargetView()
+        renderer.state = .Running
     }
 
     func handlePan(recognizer: UIPanGestureRecognizer) {
@@ -58,12 +56,7 @@ class ViewController: UIViewController, MetaballDataSource {
 
         selectedMetaball?.middle = location
 
-        if recognizer.state == .Changed && renderer.supportsDynamicRendering {
-            renderer.updateTargetView()
-        }
-        if recognizer.state == .Ended {
-            renderer.updateTargetView()
-        }
+        renderer.state = .Running
     }
 }
 

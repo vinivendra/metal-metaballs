@@ -1,5 +1,3 @@
-// TODO: Create state machine
-// TODO: Make draw calls auto-loop, conditioned to the state machine
 // TODO: Create compute context to contain texture and imageBuffer
 // TOOD: Use two compute contexts and double recursion
 
@@ -11,6 +9,8 @@
 
 import Metal
 import UIKit
+
+var i = 0
 
 class MetalMetaballRenderer: MetaballRenderer {
 
@@ -33,11 +33,31 @@ class MetalMetaballRenderer: MetaballRenderer {
     var dirty = false
     var metalIsBusy = false
 
+    enum RendererState {
+        case Idle
+        case Running
+        case Ending
+    }
+
+    var state: RendererState = .Idle {
+        willSet {
+            if state == .Idle {
+                if newValue == .Running {
+                    updateTargetView()
+                }
+            }
+        }
+    }
+
     required init(dataSource: MetaballDataSource) {
         self.dataSource = dataSource
     }
 
     func updateTargetView() {
+
+        print("Update \(i++)!")
+
+        state = .Ending
 
         // Re-alloc buffers if the size has changed
         if previousSize != targetView.size {
@@ -56,6 +76,12 @@ class MetalMetaballRenderer: MetaballRenderer {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 // Send image to view
                 self.targetView.image = uiimage
+
+                if self.state != .Running {
+                    self.state = .Idle
+                } else {
+                    self.updateTargetView()
+                }
             })
         }
     }
@@ -97,7 +123,7 @@ class MetalMetaballRenderer: MetaballRenderer {
 
             commandBuffer.commit()
             commandBuffer.waitUntilCompleted()
-            
+
         } catch _ {
             print("Error!")
         }
@@ -155,9 +181,9 @@ class MetalMetaballRenderer: MetaballRenderer {
             let x = CGFloat(metaball.midX)
             let y = CGFloat(metaball.midY)
             if -border < x ≤ targetView.width + border &&
-               -border < y ≤ targetView.height + border {
-                array.append(Float(x))
-                array.append(Float(y))
+                -border < y ≤ targetView.height + border {
+                    array.append(Float(x))
+                    array.append(Float(y))
             }
             return array
         }
@@ -166,17 +192,17 @@ class MetalMetaballRenderer: MetaballRenderer {
 
         // Create buffer
         let buffer = context.device.newBufferWithBytes(floats, length: floats.count * sizeof(Float), options: .StorageModeShared)
-
+        
         return buffer
     }
-
+    
     func updateFrame() {
         if imageBuffer != nil {
             free(imageBuffer)
         }
         imageBuffer = nil
     }
-
+    
     deinit {
         free(imageBuffer)
     }
