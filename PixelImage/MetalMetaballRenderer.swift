@@ -23,6 +23,8 @@ class MetalMetaballRenderer {
 
     let dataSource: MetaballDataSource
 
+    let semaphore = dispatch_semaphore_create(2)
+
     enum RendererState {
         case Idle
         case Running
@@ -57,6 +59,9 @@ class MetalMetaballRenderer {
 
     func updateTargetView() {
 
+        let timeout = dispatch_time(DISPATCH_TIME_NOW, 1000000000)
+        dispatch_semaphore_wait(semaphore, timeout)
+
         print("Update \(i++)!")
 
         state = .Ending
@@ -69,18 +74,20 @@ class MetalMetaballRenderer {
             // Render graphics to metal texture
             self.renderToContext(computeContext)
 
+            if self.state != .Running {
+                self.state = .Idle
+            } else {
+                self.updateTargetView()
+            }
+
             // Transform metal texture into image
             let uiimage = self.createImageFromContext(computeContext)
+
+            dispatch_semaphore_signal(self.semaphore)
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 // Send image to view
                 self.targetView.image = uiimage
-
-                if self.state != .Running {
-                    self.state = .Idle
-                } else {
-                    self.updateTargetView()
-                }
             })
         }
     }
