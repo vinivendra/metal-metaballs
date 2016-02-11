@@ -1,9 +1,3 @@
-// TODO: Make graphics have edges only according to graph (instead of being a complete graph)
-
-// TODO: Interpolate metaball colors
-// TODO: Use metaballs as mask: apply strong blur inside, weak blur outside
-// TODO: Add antialiasing
-
 import Metal
 import UIKit
 
