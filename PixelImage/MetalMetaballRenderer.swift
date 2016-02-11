@@ -23,9 +23,6 @@ class MetalMetaballRenderer {
 
     let dataSource: MetaballDataSource
 
-    var dirty = false
-    var metalIsBusy = false
-
     enum RendererState {
         case Idle
         case Running
