@@ -1,4 +1,8 @@
-// TODO: Make graphics have edges only according to graph (instead of being a complete graph)
+// TODO: Create graph api w/ adj matrix and copy value
+// TODO: Change shader to adopt graph logic
+// TODO: Create matrix class to enable reference value
+// TODO: Make graph swap matrices: one for rendering, one for updating
+// TODO: Try animation for adding/removing edges
 
 // TODO: Interpolate metaball colors
 // TODO: Use metaballs as mask: apply strong blur inside, weak blur outside
