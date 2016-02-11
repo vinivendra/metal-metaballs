@@ -63,10 +63,10 @@ class MetalMetaballRenderer {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) { () -> Void in
 
             // Render graphics to metal texture
-            self.renderToContext(shouldUsePrimaryContext: true)
+            self.renderToContext(self.computeContext)
 
             // Transform metal texture into image
-            let uiimage = self.createImageFromContext(shouldUsePrimaryContext: true)
+            let uiimage = self.createImageFromContext(self.computeContext)
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 // Send image to view
@@ -81,7 +81,7 @@ class MetalMetaballRenderer {
         }
     }
 
-    func renderToContext(shouldUsePrimaryContext shouldUsePrimaryContext: Bool) {
+    func renderToContext(computeContext: MTLComputeContext) {
         let width = Int(targetView.width)
         let height = Int(targetView.height)
 
@@ -117,7 +117,7 @@ class MetalMetaballRenderer {
         }
     }
 
-    func createImageFromContext(shouldUsePrimaryContext shouldUsePrimaryContext: Bool) -> UIImage {
+    func createImageFromContext(computeContext: MTLComputeContext) -> UIImage {
         let texture = computeContext.texture
 
         // Get image info
