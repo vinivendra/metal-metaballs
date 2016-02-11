@@ -3,11 +3,8 @@ import UIKit
 
 class ViewController: UIViewController, MetaballDataSource {
 
-    typealias Renderer = MetalMetaballRenderer // ImageMetaballRenderer // MetalMetaballRenderer
-    typealias TargetView = Renderer.TargetView
-
-    var metaballView: TargetView!
-    var renderer: Renderer!
+    var metaballView: UIImageView!
+    var renderer: MetalMetaballRenderer!
 
     let width = 350
     let height = 600
@@ -25,7 +22,7 @@ class ViewController: UIViewController, MetaballDataSource {
 
         let border = 20
         let metaballViewFrame = CGRect(x: border/2, y: border/2, width: width, height: height)
-        renderer = Renderer(dataSource: self, frame: metaballViewFrame)
+        renderer = MetalMetaballRenderer(dataSource: self, frame: metaballViewFrame)
         metaballView = renderer.targetView
 
         let bigView = UIView(frame: CGRect(x: 10, y: 70, width: width + border, height: height + border))
