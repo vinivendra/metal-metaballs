@@ -9,14 +9,6 @@
 import Metal
 import UIKit
 
-class TextureRef {
-    var texture: MTLTexture
-
-    init(texture: MTLTexture) {
-        self.texture = texture
-    }
-}
-
 class MetalMetaballRenderer: MetaballRenderer {
 
     typealias TargetView = UIImageView
@@ -30,7 +22,7 @@ class MetalMetaballRenderer: MetaballRenderer {
     var previousSize = CGSize.zero
 
     let context = MTLContext()
-    var renderingTexture: TextureRef!
+    var renderingTexture: MTLTexture!
     var imageBuffer: UnsafeMutablePointer<Void>!
 
     let dataSource: MetaballDataSource
@@ -50,31 +42,17 @@ class MetalMetaballRenderer: MetaballRenderer {
             updateFrame()
         }
 
-        if metalIsBusy {
-            dirty = true
-            return
-        } else {
-            metalIsBusy = true
-            dirty = false
-        }
-
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) { () -> Void in
 
             // Render graphics to metal texture
             self.renderToRenderingTexture()
-            self.metalIsBusy = false
 
             // Transform metal texture into image
-            let uiimage = self.image(texture: self.renderingTexture.texture)
+            let uiimage = self.createImageFromTexture()
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 // Send image to view
                 self.targetView.image = uiimage
-
-                // If the image is dirty, update it
-                if self.dirty {
-                    self.updateTargetView()
-                }
             })
         }
     }
@@ -87,7 +65,7 @@ class MetalMetaballRenderer: MetaballRenderer {
             let textureDescriptor =
             MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(.BGRA8Unorm, width: width, height: height, mipmapped: false)
 
-            renderingTexture = TextureRef(texture: context.device.newTextureWithDescriptor(textureDescriptor))
+            renderingTexture = context.device.newTextureWithDescriptor(textureDescriptor)
         }
 
         let kernelFunction: MTLFunction?
@@ -107,7 +85,7 @@ class MetalMetaballRenderer: MetaballRenderer {
 
             let commandEncoder = commandBuffer.computeCommandEncoder()
             commandEncoder.setComputePipelineState(pipeline)
-            commandEncoder.setTexture(renderingTexture.texture, atIndex: 0)
+            commandEncoder.setTexture(renderingTexture, atIndex: 0)
             let metaballInfoBuffer = metaballBuffer()
             commandEncoder.setBuffer(metaballInfoBuffer, offset: 0, atIndex: 0)
             commandEncoder.dispatchThreadgroups(threadGroups,
@@ -122,7 +100,9 @@ class MetalMetaballRenderer: MetaballRenderer {
         }
     }
 
-    func image(texture texture: MTLTexture) -> UIImage {
+    func createImageFromTexture() -> UIImage {
+        let texture = renderingTexture
+
         // Get image info
         let imageSize = CGSizeMake(CGFloat(texture.width),
             CGFloat(texture.height))
