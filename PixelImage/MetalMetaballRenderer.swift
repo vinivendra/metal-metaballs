@@ -1,8 +1,6 @@
 import Metal
 import UIKit
 
-var i = 0
-
 class MetalMetaballRenderer {
 
     typealias TargetView = UIImageView
@@ -53,8 +51,6 @@ class MetalMetaballRenderer {
 
         let timeout = dispatch_time(DISPATCH_TIME_NOW, 1000000000)
         dispatch_semaphore_wait(semaphore, timeout)
-
-        print("Update \(i++)!")
 
         state = .Ending
 
@@ -108,6 +104,8 @@ class MetalMetaballRenderer {
             commandEncoder.setTexture(computeContext.texture, atIndex: 0)
             let metaballInfoBuffer = metaballBuffer()
             commandEncoder.setBuffer(metaballInfoBuffer, offset: 0, atIndex: 0)
+            let edgesBuffer = metaballEdgesBuffer()
+            commandEncoder.setBuffer(edgesBuffer, offset: 0, atIndex: 1)
             commandEncoder.dispatchThreadgroups(threadGroups,
                 threadsPerThreadgroup: threadGroupCounts)
             commandEncoder.endEncoding()
@@ -161,6 +159,14 @@ class MetalMetaballRenderer {
             orientation: UIImageOrientation.Up)
 
         return image
+    }
+
+    func metaballEdgesBuffer() -> MTLBuffer {
+        let floats = dataSource.metaballGraph.adjacencyMatrix.buffer
+
+        let buffer = context.device.newBufferWithBytes(floats, length: floats.count * sizeof(Float), options: .StorageModeShared)
+
+        return buffer
     }
 
     func metaballBuffer() -> MTLBuffer {

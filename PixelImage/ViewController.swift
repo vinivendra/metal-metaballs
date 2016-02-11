@@ -20,10 +20,16 @@ class ViewController: UIViewController, MetaballDataSource {
         let recognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
         view.addGestureRecognizer(recognizer)
 
-        let metaballs = [CGPoint(x: 70, y: 70), CGPoint(x: 270, y: 470), CGPoint(x: 270, y: 70), CGPoint(x: 70, y: 470)].map {
+        let metaballs = [CGPoint(x: 70, y: 70), CGPoint(x: 270, y: 70), CGPoint(x: 270, y: 470), CGPoint(x: 70, y: 470)].map {
             Metaball(position: $0)
         }
         metaballGraph = Graph(vertices: metaballs)
+        metaballGraph.addEdge(0, 1)
+        metaballGraph.addEdge(0, 3)
+        metaballGraph.addEdge(1, 2)
+        metaballGraph.addEdge(2, 3)
+        metaballGraph.removeEdge(2, 3)
+        print(metaballGraph.adjacencyMatrix)
 
         let border = 20
         let metaballViewFrame = CGRect(x: border/2, y: border/2, width: width, height: height)

@@ -5,6 +5,12 @@ class Graph<T> {
     var adjacencyMatrix: Matrix
     var vertices: [T]
 
+    var size: Int {
+        get {
+            return vertices.count
+        }
+    }
+
     init(vertices: [T]) {
         let size = vertices.count
 
@@ -24,20 +30,20 @@ class Graph<T> {
 }
 
 struct Matrix: CustomStringConvertible {
-    private var buffer: [CGFloat]
+    var buffer: [Float]
 
     let size: Int
 
     init(size: Int) {
-        buffer = [CGFloat](count: size * size, repeatedValue: 0.0)
+        buffer = [Float](count: size * size, repeatedValue: 0.0)
         self.size = size
     }
 
-    func get(i: Int, j: Int) -> CGFloat {
+    func get(i: Int, j: Int) -> Float {
         return buffer[index(i, j)]
     }
 
-    mutating func set(i: Int, _ j: Int, value: CGFloat = 1.0) {
+    mutating func set(i: Int, _ j: Int, value: Float = 1.0) {
         buffer[index(i, j)] = value
     }
 
