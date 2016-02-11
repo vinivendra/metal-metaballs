@@ -14,6 +14,8 @@ class ViewController: UIViewController, MetaballDataSource {
     }
     var previousLocation: CGPoint!
 
+    var selectedMetaball: Metaball?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -40,17 +42,23 @@ class ViewController: UIViewController, MetaballDataSource {
     func handlePan(recognizer: UIPanGestureRecognizer) {
         let location = recognizer.locationInView(metaballView)
 
-        var selectedMetaball: UIView?
-
-        for metaball in metaballs where
-            abs(metaball.midX - location.x) < 50 && abs(metaball.midY - location.y) < 50 {
-                selectedMetaball = metaball
-                break
+        if selectedMetaball == nil {
+            for metaball in metaballs where
+                abs(metaball.midX - location.x) < 50 && abs(metaball.midY - location.y) < 50 {
+                    selectedMetaball = metaball
+                    break
+            }
         }
+
+        guard selectedMetaball != nil else { return }
 
         selectedMetaball?.middle = location
 
         renderer.state = .Running
+
+        if recognizer.state == .Ended {
+            selectedMetaball = nil
+        }
     }
 }
 
