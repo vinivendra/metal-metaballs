@@ -20,16 +20,13 @@ class ViewController: UIViewController, MetaballDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        renderer = Renderer(dataSource: self)
-
         let recognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
         view.addGestureRecognizer(recognizer)
 
-
         let border = 20
         let metaballViewFrame = CGRect(x: border/2, y: border/2, width: width, height: height)
+        renderer = Renderer(dataSource: self, frame: metaballViewFrame)
         metaballView = renderer.targetView
-        metaballView.frame = metaballViewFrame
 
         let bigView = UIView(frame: CGRect(x: 10, y: 70, width: width + border, height: height + border))
         bigView.backgroundColor = UIColor.redColor()

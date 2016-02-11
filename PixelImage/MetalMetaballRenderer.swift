@@ -11,7 +11,7 @@ import UIKit
 
 var i = 0
 
-class MetalMetaballRenderer: MetaballRenderer {
+class MetalMetaballRenderer {
 
     typealias TargetView = UIImageView
 
@@ -20,10 +20,10 @@ class MetalMetaballRenderer: MetaballRenderer {
         }
     }
 
-    let targetView = TargetView()
+    let targetView: TargetView
 
     let context = MTLContext()
-    var computeContext: MTLComputeContext!
+    var computeContext: MTLComputeContext
 
     let dataSource: MetaballDataSource
 
@@ -46,8 +46,17 @@ class MetalMetaballRenderer: MetaballRenderer {
         }
     }
 
-    required init(dataSource: MetaballDataSource) {
+    required init(dataSource: MetaballDataSource, frame: CGRect) {
         self.dataSource = dataSource
+
+        targetView = TargetView(frame: frame)
+
+        let width = Int(frame.width)
+        let height = Int(frame.height)
+        let textureDescriptor =
+        MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(.BGRA8Unorm, width: width, height: height, mipmapped: false)
+        let texture = context.device.newTextureWithDescriptor(textureDescriptor)
+        computeContext = MTLComputeContext(size: targetView.size, texture: texture)
     }
 
     func updateTargetView() {
@@ -80,14 +89,6 @@ class MetalMetaballRenderer: MetaballRenderer {
     func renderToContext(shouldUsePrimaryContext shouldUsePrimaryContext: Bool) {
         let width = Int(targetView.width)
         let height = Int(targetView.height)
-
-        if computeContext == nil {
-            let textureDescriptor =
-            MTLTextureDescriptor.texture2DDescriptorWithPixelFormat(.BGRA8Unorm, width: width, height: height, mipmapped: false)
-
-            let texture = context.device.newTextureWithDescriptor(textureDescriptor)
-            computeContext = MTLComputeContext(size: targetView.size, texture: texture)
-        }
 
         let kernelFunction: MTLFunction?
         let pipeline: MTLComputePipelineState
