@@ -1,4 +1,3 @@
-// TODO: Create compute context to contain texture and imageBuffer
 // TOOD: Use two compute contexts and double recursion
 
 // TODO: Make graphics have edges only according to graph (instead of being a complete graph)
@@ -60,10 +59,10 @@ class MetalMetaballRenderer: MetaballRenderer {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) { () -> Void in
 
             // Render graphics to metal texture
-            self.renderToRenderingTexture()
+            self.renderToContext(shouldUsePrimaryContext: true)
 
             // Transform metal texture into image
-            let uiimage = self.createImageFromTexture()
+            let uiimage = self.createImageFromContext(shouldUsePrimaryContext: true)
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 // Send image to view
@@ -78,7 +77,7 @@ class MetalMetaballRenderer: MetaballRenderer {
         }
     }
 
-    func renderToRenderingTexture() {
+    func renderToContext(shouldUsePrimaryContext shouldUsePrimaryContext: Bool) {
         let width = Int(targetView.width)
         let height = Int(targetView.height)
 
@@ -122,7 +121,7 @@ class MetalMetaballRenderer: MetaballRenderer {
         }
     }
 
-    func createImageFromTexture() -> UIImage {
+    func createImageFromContext(shouldUsePrimaryContext shouldUsePrimaryContext: Bool) -> UIImage {
         let texture = computeContext.texture
 
         // Get image info
