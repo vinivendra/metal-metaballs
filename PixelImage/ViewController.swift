@@ -43,6 +43,31 @@ class ViewController: UIViewController, MetaballDataSource {
             metaballView.addSubview(metaball)
         }
 
+        let parameters = EdgeAnimationParameters(startDate: NSDate(), duration: 3, fadeIn: true, i: 0, j: 2)
+        NSTimer.scheduledTimerWithTimeInterval(1.0/60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters, repeats: true)
+
+        renderer.state = .Running
+    }
+
+    func animateEdge(withTimer timer: NSTimer) {
+        let (animationStart, duration, fadeIn, i, j) = (timer.userInfo as! EdgeAnimationParameters).unpack()
+
+        let now = NSDate()
+        var timeElapsed = Float(now.timeIntervalSinceDate(animationStart))
+
+        if timeElapsed > duration {
+            timer.invalidate()
+            timeElapsed = duration
+        }
+
+        let interpolee = timeElapsed / duration
+        let interpolated = interpolee ^ 3
+
+        let newValue = fadeIn ? interpolated : (1 - interpolated)
+
+        metaballGraph.adjacencyMatrix.set(i, j, value: newValue)
+        metaballGraph.adjacencyMatrix.set(j, i, value: newValue)
+
         renderer.state = .Running
     }
 
