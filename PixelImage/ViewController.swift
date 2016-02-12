@@ -47,10 +47,6 @@ class ViewController: UIViewController, MetaballDataSource {
 
         addEdge(0, 2)
 
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(2) * Int64(NSEC_PER_SEC)), dispatch_get_main_queue()) { () -> Void in
-            self.removeEdge(0, 2)
-        }
-
         renderer.state = .Running
     }
 
