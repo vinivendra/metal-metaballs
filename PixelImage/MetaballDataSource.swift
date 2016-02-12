@@ -2,5 +2,13 @@
 import Metal
 
 protocol MetaballDataSource {
-    var metaballs: [Metaball] { get }
+    var metaballGraph: Graph<Metaball>! { get }
+}
+
+extension MetaballDataSource {
+    var metaballs: [Metaball]! {
+        get {
+            return metaballGraph.vertices
+        }
+    }
 }
