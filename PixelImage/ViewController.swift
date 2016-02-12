@@ -55,12 +55,15 @@ class ViewController: UIViewController, MetaballDataSource {
     }
 
     func addEdge(i: Int, _ j: Int) {
-        let parameters = EdgeAnimationParameters(startDate: NSDate(), duration: edgeAnimationDuration, fadeIn: true, i: i, j: j)
-        NSTimer.scheduledTimerWithTimeInterval(1.0/60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters, repeats: true)
+        animateEdge(i, j, fadeIn: true)
     }
 
     func removeEdge(i: Int, _ j: Int) {
-        let parameters = EdgeAnimationParameters(startDate: NSDate(), duration: edgeAnimationDuration, fadeIn: false, i: i, j: j)
+        animateEdge(i, j, fadeIn: false)
+    }
+
+    func animateEdge(i: Int, _ j: Int, fadeIn: Bool) {
+        let parameters = EdgeAnimationParameters(startDate: NSDate(), duration: edgeAnimationDuration, fadeIn: fadeIn, i: i, j: j)
         NSTimer.scheduledTimerWithTimeInterval(1.0/60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters, repeats: true)
     }
 
