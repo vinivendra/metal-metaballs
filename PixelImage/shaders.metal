@@ -25,23 +25,21 @@ kernel void drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)
     }
 
     for (i = 1, x = 0; i < metaballArraySize; i += 2, x += 1) {
+        float value1 = 2048 / (metaballDistances[x] + 1);
+        float2 direction1 = metaballDirections[x];
+
         for (j = i + 2, y = x + 1; j < metaballArraySize; j += 2, y += 1) {
-            float value1 = 2048 / (metaballDistances[x] + 1);
+
             float value2 = 2048 / (metaballDistances[y] + 1);
+            float2 direction2 = metaballDirections[y];
 
             float v = value1 + value2;
-
             float weightedValue = 0.5 * v;
 
             char edgeIndex = y * numberOfMetaballs + x;
             float edgeWeight = edgesBuffer[edgeIndex];
-            float2 direction1 = metaballDirections[x];
-            float2 direction2 = metaballDirections[y];
-
             float cosine = dot(direction1, direction2);
-
             float link = pow(((1 - cosine) * 0.5), 100);
-
             float weightedLink = 0.6 * link * edgeWeight;
 
             sum += step(0.5, weightedValue + weightedLink);
