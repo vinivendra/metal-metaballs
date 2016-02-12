@@ -43,8 +43,13 @@ class ViewController: UIViewController, MetaballDataSource {
             metaballView.addSubview(metaball)
         }
 
-        let parameters = EdgeAnimationParameters(startDate: NSDate(), duration: 3, fadeIn: true, i: 0, j: 2)
+        let parameters = EdgeAnimationParameters(startDate: NSDate(), duration: 1, fadeIn: true, i: 0, j: 2)
         NSTimer.scheduledTimerWithTimeInterval(1.0/60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters, repeats: true)
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(2) * Int64(NSEC_PER_SEC)), dispatch_get_main_queue()) { () -> Void in
+            let parameters2 = EdgeAnimationParameters(startDate: NSDate(), duration: 1, fadeIn: false, i: 0, j: 2)
+            NSTimer.scheduledTimerWithTimeInterval(1.0/60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters2, repeats: true)
+        }
 
         renderer.state = .Running
     }
@@ -60,13 +65,11 @@ class ViewController: UIViewController, MetaballDataSource {
             timeElapsed = duration
         }
 
-        let interpolee = timeElapsed / duration
-        let interpolated = interpolee ^ 3
+        let linearValue = timeElapsed / duration
+        let interpolatedValue = fadeIn ? interpolateSquareEaseOut(linearValue) : (1 - interpolateSquareEaseIn(linearValue))
 
-        let newValue = fadeIn ? interpolated : (1 - interpolated)
-
-        metaballGraph.adjacencyMatrix.set(i, j, value: newValue)
-        metaballGraph.adjacencyMatrix.set(j, i, value: newValue)
+        metaballGraph.adjacencyMatrix.set(i, j, value: interpolatedValue)
+        metaballGraph.adjacencyMatrix.set(j, i, value: interpolatedValue)
 
         renderer.state = .Running
     }
