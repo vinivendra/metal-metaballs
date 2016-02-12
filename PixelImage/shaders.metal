@@ -3,11 +3,7 @@
 
 using namespace metal;
 
-kernel void
-    drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)]],
-                  constant float *edgesBuffer[[buffer(1)]],
-                  constant float *metaballBuffer[[buffer(0)]],
-                  uint2 gid[[thread_position_in_grid]]) {
+kernel void drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)]], constant float *edgesBuffer[[buffer(1)]], constant float *metaballBuffer[[buffer(0)]], uint2 gid[[thread_position_in_grid]]) {
 
     uint numberOfMetaballs = metaballBuffer[0];
     uint metaballArraySize = numberOfMetaballs * 2 + 1;
@@ -16,19 +12,22 @@ kernel void
 
     uint i, j, x, y;
 
+    float metaballDistances[10];
+    float2 metaballDirections[10];
+
+    for (i = 1, x = 0; i < metaballArraySize; i += 2, x += 1) {
+        float2 metaball = float2(metaballBuffer[i], metaballBuffer[i + 1]);
+        float2 vector = float2(metaball.x - gid.x, metaball.y - gid.y);
+        float squaredDistance = dot(vector, vector);
+        float realDistance = sqrt(squaredDistance);
+        metaballDistances[x] = squaredDistance;
+        metaballDirections[x] = vector/realDistance;
+    }
+
     for (i = 1, x = 0; i < metaballArraySize; i += 2, x += 1) {
         for (j = i + 2, y = x + 1; j < metaballArraySize; j += 2, y += 1) {
-            float2 metaball1 = float2(metaballBuffer[i], metaballBuffer[i + 1]);
-
-            float2 metaball2 = float2(metaballBuffer[j], metaballBuffer[j + 1]);
-
-            float2 metaball1Vector
-                = float2(metaball1.x - gid.x, metaball1.y - gid.y);
-            float2 metaball2Vector
-                = float2(metaball2.x - gid.x, metaball2.y - gid.y);
-
-            float value1 = 2048 / (dot(metaball1Vector, metaball1Vector) + 1);
-            float value2 = 2048 / (dot(metaball2Vector, metaball2Vector) + 1);
+            float value1 = 2048 / (metaballDistances[x] + 1);
+            float value2 = 2048 / (metaballDistances[y] + 1);
 
             float v = value1 + value2;
 
@@ -36,8 +35,8 @@ kernel void
 
             char edgeIndex = y * numberOfMetaballs + x;
             float edgeWeight = edgesBuffer[edgeIndex];
-            float2 direction1 = normalize(metaball1Vector);
-            float2 direction2 = normalize(metaball2Vector);
+            float2 direction1 = metaballDirections[x];
+            float2 direction2 = metaballDirections[y];
 
             float cosine = dot(direction1, direction2);
 
