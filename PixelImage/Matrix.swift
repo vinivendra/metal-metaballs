@@ -70,3 +70,23 @@ struct Matrix: CustomStringConvertible {
         }
     }
 }
+
+class EdgeAnimationParameters {
+    let startDate: NSDate
+    let duration: Float
+    let fadeIn: Bool
+    let i: Int
+    let j: Int
+
+    func unpack() -> (startDate: NSDate, duration: Float, fadeIn: Bool, i: Int, j: Int) {
+        return (startDate, duration, fadeIn, i, j)
+    }
+
+    init(startDate: NSDate, duration: Float, fadeIn: Bool, i: Int, j: Int) {
+        self.startDate = startDate
+        self.duration = duration
+        self.fadeIn = fadeIn
+        self.i = i
+        self.j = j
+    }
+}
