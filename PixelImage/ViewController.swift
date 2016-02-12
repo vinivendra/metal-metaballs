@@ -14,6 +14,8 @@ class ViewController: UIViewController, MetaballDataSource {
 
     var selectedMetaball: Metaball?
 
+    let edgeAnimationDuration: Float = 1
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -43,15 +45,23 @@ class ViewController: UIViewController, MetaballDataSource {
             metaballView.addSubview(metaball)
         }
 
-        let parameters = EdgeAnimationParameters(startDate: NSDate(), duration: 1, fadeIn: true, i: 0, j: 2)
-        NSTimer.scheduledTimerWithTimeInterval(1.0/60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters, repeats: true)
+        addEdge(0, 2)
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(2) * Int64(NSEC_PER_SEC)), dispatch_get_main_queue()) { () -> Void in
-            let parameters2 = EdgeAnimationParameters(startDate: NSDate(), duration: 1, fadeIn: false, i: 0, j: 2)
-            NSTimer.scheduledTimerWithTimeInterval(1.0/60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters2, repeats: true)
+            self.removeEdge(0, 2)
         }
 
         renderer.state = .Running
+    }
+
+    func addEdge(i: Int, _ j: Int) {
+        let parameters = EdgeAnimationParameters(startDate: NSDate(), duration: edgeAnimationDuration, fadeIn: true, i: i, j: j)
+        NSTimer.scheduledTimerWithTimeInterval(1.0/60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters, repeats: true)
+    }
+
+    func removeEdge(i: Int, _ j: Int) {
+        let parameters = EdgeAnimationParameters(startDate: NSDate(), duration: edgeAnimationDuration, fadeIn: false, i: i, j: j)
+        NSTimer.scheduledTimerWithTimeInterval(1.0/60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters, repeats: true)
     }
 
     func animateEdge(withTimer timer: NSTimer) {
