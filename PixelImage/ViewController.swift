@@ -28,8 +28,6 @@ class ViewController: UIViewController, MetaballDataSource {
         metaballGraph.addEdge(0, 3)
         metaballGraph.addEdge(1, 2)
         metaballGraph.addEdge(2, 3)
-        metaballGraph.removeEdge(2, 3)
-        print(metaballGraph.adjacencyMatrix)
 
         let border = 20
         let metaballViewFrame = CGRect(x: border/2, y: border/2, width: width, height: height)
