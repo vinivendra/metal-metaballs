@@ -24,12 +24,14 @@ kernel void drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)
         metaballDirections[x] = vector/realDistance;
     }
 
+    float bendClose = 0.0;
+    float bendCloseCount = 0.0;
+
     for (x = 0; x < numberOfMetaballs; x += 1) {
         float value1 = 2048 / (metaballDistances[x] + 1);
         float2 direction1 = metaballDirections[x];
 
         for (y = x + 1; y < numberOfMetaballs; y += 1) {
-
             float value2 = 2048 / (metaballDistances[y] + 1);
             float2 direction2 = metaballDirections[y];
 
@@ -42,11 +44,28 @@ kernel void drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)
             float link = pow(((1 - cosine) * 0.5), 100);
             float weightedLink = 0.6 * link * edgeWeight;
 
+            float result = weightedValue + weightedLink;
+
+            if (result > 0.4 && result < 0.6) {
+                bendClose += result;
+                bendCloseCount += 1.0;
+            }
+
             sum += step(0.5, weightedValue + weightedLink);
         }
     }
 
-    float result = step(0.4, sum);
+    bendClose = bendClose / bendCloseCount;
 
-    outTexture.write(float4(result, result / 2, 0, 1), gid);
+    if (bendClose != 0.0) {
+        bendClose = (bendClose - 0.4) * (1/(0.6-0.4));
+    } else {
+        bendClose = 0.0;
+    }
+
+    float result = step(0.4, sum);
+    result += bendClose * 10;
+    result = clamp(result, 0.0, 1.0);
+
+    outTexture.write(float4(result, result / 2, 0.0, 1), gid);
 }

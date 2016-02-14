@@ -29,6 +29,7 @@ class ViewController: UIViewController, MetaballDataSource {
         metaballGraph.addEdge(0, 1)
         metaballGraph.addEdge(0, 3)
         metaballGraph.addEdge(1, 2)
+        metaballGraph.addEdge(1, 3)
         metaballGraph.addEdge(2, 3)
 
         let border = 20
