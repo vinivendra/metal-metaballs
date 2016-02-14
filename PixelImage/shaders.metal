@@ -6,7 +6,7 @@ using namespace metal;
 kernel void drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)]], constant float *edgesBuffer[[buffer(1)]], constant float *metaballBuffer[[buffer(0)]], uint2 gid[[thread_position_in_grid]]) {
 
     char numberOfMetaballs = metaballBuffer[0];
-    char metaballArraySize = numberOfMetaballs * 2 + 1;
+    char metaballArraySize = numberOfMetaballs * 5 + 1;
 
     float sum = 0;
 
@@ -15,7 +15,7 @@ kernel void drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)
     float metaballDistances[10];
     float2 metaballDirections[10];
 
-    for (y = 1, x = 0; y < metaballArraySize; y += 2, x += 1) {
+    for (y = 1, x = 0; y < metaballArraySize; y += 5, x += 1) {
         float2 metaball = float2(metaballBuffer[y], metaballBuffer[y + 1]);
         float2 vector = float2(metaball.x - gid.x, metaball.y - gid.y);
         float squaredDistance = dot(vector, vector);

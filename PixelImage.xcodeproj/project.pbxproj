@@ -13,6 +13,7 @@
 		2426868F1C63B72A00D62456 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2426868E1C63B72A00D62456 /* Assets.xcassets */; };
 		242686921C63B72A00D62456 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 242686901C63B72A00D62456 /* LaunchScreen.storyboard */; };
 		2461651B1C6DA4F400A913C8 /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2461651A1C6DA4F400A913C8 /* Interpolation.swift */; };
+		246B0F831C70635D00A71D05 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B0F821C70635D00A71D05 /* UIColor.swift */; };
 		249CF84C1C6D113C008B0C78 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CF84B1C6D113C008B0C78 /* Matrix.swift */; };
 		24E1E7D71C67C8B200ECF1C4 /* UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7D61C67C8B200ECF1C4 /* UIKit.swift */; };
 		24E1E7E21C67D37F00ECF1C4 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24E1E7E11C67D37F00ECF1C4 /* Metal.framework */; };
@@ -61,6 +62,7 @@
 		242686911C63B72A00D62456 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		242686931C63B72A00D62456 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2461651A1C6DA4F400A913C8 /* Interpolation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Interpolation.swift; path = PixelImage/Interpolation.swift; sourceTree = SOURCE_ROOT; };
+		246B0F821C70635D00A71D05 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		249CF84B1C6D113C008B0C78 /* Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		24E1E7D61C67C8B200ECF1C4 /* UIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKit.swift; sourceTree = "<group>"; };
 		24E1E7E11C67D37F00ECF1C4 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
@@ -143,6 +145,7 @@
 				242686871C63B72A00D62456 /* AppDelegate.swift */,
 				242686891C63B72A00D62456 /* ViewController.swift */,
 				24E1E7D61C67C8B200ECF1C4 /* UIKit.swift */,
+				246B0F821C70635D00A71D05 /* UIColor.swift */,
 				24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */,
 				24E1E7EA1C67D70300ECF1C4 /* MetalMetaballRenderer.swift */,
 				24E1E7EE1C67D74300ECF1C4 /* Metal.swift */,
@@ -383,6 +386,7 @@
 				24FFA86E1C6BA038005ACD60 /* Dictionary.swift in Sources */,
 				24FFA87D1C6BA038005ACD60 /* Hopping.swift in Sources */,
 				24E1E7EB1C67D70300ECF1C4 /* MetalMetaballRenderer.swift in Sources */,
+				246B0F831C70635D00A71D05 /* UIColor.swift in Sources */,
 				24FFA87A1C6BA038005ACD60 /* Enumerate.swift in Sources */,
 				242686881C63B72A00D62456 /* AppDelegate.swift in Sources */,
 				24E1E7F01C67D74300ECF1C4 /* Metal.swift in Sources */,

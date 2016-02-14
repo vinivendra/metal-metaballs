@@ -1,5 +1,6 @@
 import Metal
 import UIKit
+import ChameleonFramework
 
 class MetalMetaballRenderer {
 
@@ -181,11 +182,18 @@ class MetalMetaballRenderer {
                 -border < y ≤ targetView.height + border {
                     array.append(Float(x))
                     array.append(Float(y))
+
+                    let color = UIColor.randomFlatColor()
+                    let components = color.components
+                    array.append(Float(components.blue))
+                    array.append(Float(components.green))
+                    array.append(Float(components.red))
             }
             return array
         }
+
         // Add array size to start of array so metal knows how far to go
-        floats[0] = Float(floats.count) / 2
+        floats[0] = Float(floats.count) / 5
 
         // Create buffer
         let buffer = context.device.newBufferWithBytes(floats, length: floats.count * sizeof(Float), options: .StorageModeShared)
