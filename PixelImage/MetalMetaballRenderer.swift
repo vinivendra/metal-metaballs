@@ -175,7 +175,7 @@ class MetalMetaballRenderer {
         // Exclude metaballs far from the view's bounds
         let border: CGFloat = 100
         let metaballs = self.dataSource.metaballs
-        var floats: [Float] = metaballs.reduce([Float(0)]) { (var array, metaball) -> [Float] in
+        var floats: [Float] = metaballs.reduce([Float](count: 5, repeatedValue: 0)) { (var array, metaball) -> [Float] in
             let x = CGFloat(metaball.midX)
             let y = CGFloat(metaball.midY)
             if -border < x ≤ targetView.width + border &&
