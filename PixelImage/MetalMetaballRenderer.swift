@@ -183,11 +183,11 @@ class MetalMetaballRenderer {
                     array.append(Float(x))
                     array.append(Float(y))
 
-                    let color = UIColor.randomFlatColor()
+                    let color = metaball.backgroundColor!
                     let components = color.components
-                    array.append(Float(components.blue))
-                    array.append(Float(components.green))
                     array.append(Float(components.red))
+                    array.append(Float(components.green))
+                    array.append(Float(components.blue))
             }
             return array
         }

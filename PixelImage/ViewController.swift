@@ -114,7 +114,7 @@ class Metaball: UIView {
 
         size = CGSize(50)
         middle = position
-        backgroundColor = UIColor(red: 0.1306, green: 0.7522, blue: 0.0307, alpha: 0.3)
+        backgroundColor = UIColor(randomFlatColorOfShadeStyle: .Light)
     }
 
     required init?(coder aDecoder: NSCoder) {
