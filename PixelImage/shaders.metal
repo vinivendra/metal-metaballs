@@ -22,6 +22,8 @@ kernel void
     float sum = 0;
     float3 colorSum = float3(0, 0, 0);
     float colorAccumulation = 0;
+    float3 colorSumLink = float3(0, 0, 0);
+    float greatestLinkWeight = 0.0;
 
     char x, y;
 
@@ -43,6 +45,7 @@ kernel void
 
     float bendClose = 0.0;
     float bendCloseCount = 0.0;
+    float red = 0.0;
 
     for (x = 0; x < numberOfMetaballs; x += 1) {
         float distance1 = metaballDistances[x];
@@ -74,7 +77,18 @@ kernel void
                 bendCloseCount += 1.0;
             }
 
+            red += step(0.4, weightedValue);
+
+            if (weightedLink > greatestLinkWeight) {
+                greatestLinkWeight = weightedLink;
+                colorSumLink = float3(0.0, 0.0, 0.0);
+                colorSumLink += metaballColors[x] / distance1;
+                colorSumLink += metaballColors[y] / distance2;
+                colorSumLink /= (1 / distance1) + (1 / distance2);
+            }
+
             float metaballValue = step(0.5, weightedValue + weightedLink);
+
             sum += metaballValue;
         }
     }
@@ -91,7 +105,12 @@ kernel void
     result += bendClose * 10;
     result = clamp(result, 0.0, 1.0);
 
-    colorSum /= colorAccumulation;
+    colorSum = colorSum / colorAccumulation;
+
+    if (result > 0.0 && red < 1.0) {
+        colorSum = colorSumLink;
+    }
+
     colorSum *= result;
 
     outTexture.write(float4(colorSum.bgr, 1), gid);
