@@ -11,7 +11,11 @@ struct metaballData {
     float b;
 };
 
-kernel void drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)]], constant float *edgesBuffer[[buffer(1)]], constant metaballData *metaballBuffer[[buffer(0)]], uint2 gid[[thread_position_in_grid]]) {
+kernel void
+    drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)]],
+                  constant float *edgesBuffer[[buffer(1)]],
+                  constant metaballData *metaballBuffer[[buffer(0)]],
+                  uint2 gid[[thread_position_in_grid]]) {
 
     char numberOfMetaballs = metaballBuffer[0].x - 1;
 
@@ -28,11 +32,12 @@ kernel void drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)
     for (x = 1; x <= numberOfMetaballs; x += 1) {
         metaballData metaball = metaballBuffer[x];
         float2 metaballPosition = float2(metaball.x, metaball.y);
-        float2 vector = float2(metaballPosition.x - gid.x, metaballPosition.y - gid.y);
+        float2 vector
+            = float2(metaballPosition.x - gid.x, metaballPosition.y - gid.y);
         float squaredDistance = dot(vector, vector);
         float realDistance = sqrt(squaredDistance);
         metaballDistances[x - 1] = squaredDistance;
-        metaballDirections[x - 1] = vector/realDistance;
+        metaballDirections[x - 1] = vector / realDistance;
         metaballColors[x - 1] = float3(metaball.r, metaball.g, metaball.b);
     }
 
@@ -71,14 +76,13 @@ kernel void drawMetaballs(texture2d<float, access::write> outTexture[[texture(0)
 
             float metaballValue = step(0.5, weightedValue + weightedLink);
             sum += metaballValue;
-
         }
     }
 
     bendClose = bendClose / bendCloseCount;
 
     if (bendClose != 0.0) {
-        bendClose = (bendClose - 0.4) * (1/(0.6-0.4));
+        bendClose = (bendClose - 0.4) * (1 / (0.6 - 0.4));
     } else {
         bendClose = 0.0;
     }

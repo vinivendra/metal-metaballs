@@ -249,6 +249,7 @@
 				242686821C63B72A00D62456 /* Resources */,
 				C7A2DF67265A9D17DEFBD193 /* Embed Pods Frameworks */,
 				FADC01F75BFAC01F0260D1C9 /* Copy Pods Resources */,
+				DD0396CE594E3EAC8D18CC6C /* Tailor */,
 			);
 			buildRules = (
 			);
@@ -321,6 +322,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PixelImage/Pods-PixelImage-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		DD0396CE594E3EAC8D18CC6C /* Tailor */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Tailor;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if hash tailor 2>/dev/null; then\n  tailor --except=function-whitespace,leading-whitespace,constant-k-prefix --max-severity error\nelse\n  echo \"warning: Please install Tailor from https://tailor.sh\"\nfi";
 		};
 		EF55C7246917A184756D93D8 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

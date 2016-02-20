@@ -1,4 +1,3 @@
-
 import UIKit
 
 class ViewController: UIViewController, MetaballDataSource {
@@ -33,7 +32,7 @@ class ViewController: UIViewController, MetaballDataSource {
         metaballGraph.addEdge(2, 3)
 
         let border = 20
-        let metaballViewFrame = CGRect(x: border/2, y: border/2, width: width, height: height)
+        let metaballViewFrame = CGRect(x: border / 2, y: border / 2, width: width, height: height)
         renderer = MetalMetaballRenderer(dataSource: self, frame: metaballViewFrame)
         metaballView = renderer.targetView
 
@@ -61,11 +60,12 @@ class ViewController: UIViewController, MetaballDataSource {
 
     func animateEdge(i: Int, _ j: Int, fadeIn: Bool) {
         let parameters = EdgeAnimationParameters(startDate: NSDate(), duration: edgeAnimationDuration, fadeIn: fadeIn, i: i, j: j)
-        NSTimer.scheduledTimerWithTimeInterval(1.0/60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters, repeats: true)
+        NSTimer.scheduledTimerWithTimeInterval(1.0 / 60.0, target: self, selector: "animateEdgeWithTimer:", userInfo: parameters, repeats: true)
     }
 
     func animateEdge(withTimer timer: NSTimer) {
-        let (animationStart, duration, fadeIn, i, j) = (timer.userInfo as! EdgeAnimationParameters).unpack()
+        guard let userInfo = timer.userInfo as? EdgeAnimationParameters else { preconditionFailure() }
+        let (animationStart, duration, fadeIn, i, j) = (userInfo).unpack()
 
         let now = NSDate()
         var timeElapsed = Float(now.timeIntervalSinceDate(animationStart))
@@ -89,9 +89,9 @@ class ViewController: UIViewController, MetaballDataSource {
 
         if selectedMetaball == nil {
             for metaball in metaballs where
-                abs(metaball.midX - location.x) < 50 && abs(metaball.midY - location.y) < 50 {
-                    selectedMetaball = metaball
-                    break
+            abs(metaball.midX - location.x) < 50 && abs(metaball.midY - location.y) < 50 {
+                selectedMetaball = metaball
+                break
             }
         }
 
@@ -105,6 +105,7 @@ class ViewController: UIViewController, MetaballDataSource {
             selectedMetaball = nil
         }
     }
+
 }
 
 class Metaball: UIView {

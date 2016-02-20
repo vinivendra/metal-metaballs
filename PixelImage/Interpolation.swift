@@ -1,4 +1,3 @@
-
 func interpolateCubeEaseIn<T: Numeric>(linear: T) -> T {
     return linear ^ 3
 }
@@ -14,4 +13,3 @@ func interpolateSquareEaseOut<T: Numeric>(linear: T) -> T {
 func interpolateSmooth<T: Numeric>(linear: T) -> T {
     return ((linear) * (linear) * (linear) * ((linear) * ((linear) * 6 - 15) + 10))
 }
-

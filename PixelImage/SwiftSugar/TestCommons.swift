@@ -8,7 +8,7 @@
 
 import Darwin
 
-class Random <T: Numeric> {
+class Random<T: Numeric> {
 
     let max: Double = Double(INT32_MAX)
     let exponent: Double = 7
@@ -92,4 +92,5 @@ class Random <T: Numeric> {
         let result = Double((2 * rawRandom) - 1)
         return T.fromDouble(result)
     }
+
 }
