@@ -1,0 +1,14 @@
+
+
+# Tailor will check for violations to all rules except for the following ones
+except:
+    - constant-k-prefix
+    - function-whitespace
+    - leading-whitespace
+
+# include:
+#     - Source            # Inspect all Swift files under "Source/"
+exclude:
+    - Pods                # Ignore Swift files under "Pods/"
+    - PixelImage/SwiftSugar/SwiftSequences
+
