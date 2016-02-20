@@ -45,7 +45,7 @@ kernel void
 
     float bendClose = 0.0;
     float bendCloseCount = 0.0;
-    float red = 0.0;
+    float ball = 0.0;
 
     for (x = 0; x < numberOfMetaballs; x += 1) {
         float distance1 = metaballDistances[x];
@@ -77,17 +77,16 @@ kernel void
                 bendCloseCount += 1.0;
             }
 
-            red += step(0.4, weightedValue);
+            ball += step(0.4, weightedValue);
 
-            if (weightedLink > greatestLinkWeight) {
-                greatestLinkWeight = weightedLink;
+            float metaballValue = step(0.5, weightedValue + weightedLink);
+
+            if (metaballValue > 0.0) {
                 colorSumLink = float3(0.0, 0.0, 0.0);
                 colorSumLink += metaballColors[x] / distance1;
                 colorSumLink += metaballColors[y] / distance2;
                 colorSumLink /= (1 / distance1) + (1 / distance2);
             }
-
-            float metaballValue = step(0.5, weightedValue + weightedLink);
 
             sum += metaballValue;
         }
@@ -107,7 +106,7 @@ kernel void
 
     colorSum = colorSum / colorAccumulation;
 
-    if (result > 0.0 && red < 1.0) {
+    if (result > 0.0 && ball < 1.0) {
         colorSum = colorSumLink;
     }
 
