@@ -1,4 +1,3 @@
-
 import UIKit
 
 class Graph<T> {
@@ -27,6 +26,7 @@ class Graph<T> {
         adjacencyMatrix.reset(i, j)
         adjacencyMatrix.reset(j, i)
     }
+
 }
 
 struct Matrix: CustomStringConvertible {
