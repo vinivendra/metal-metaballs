@@ -23,7 +23,6 @@ kernel void
     float3 colorSum = float3(0, 0, 0);
     float colorAccumulation = 0;
     float3 colorSumLink = float3(0, 0, 0);
-    float greatestLinkWeight = 0.0;
 
     char x, y;
 
