@@ -71,11 +71,6 @@ kernel void
 
             float result = weightedValue + weightedLink;
 
-            if (result > 0.4 && result < 0.6) {
-                bendClose += result;
-                bendCloseCount += 1.0;
-            }
-
             ball += step(0.4, weightedValue);
 
             float metaballValue = step(0.5, weightedValue + weightedLink);
@@ -87,11 +82,16 @@ kernel void
                 colorSumLink /= (1 / distance1) + (1 / distance2);
             }
 
+            if (result > 0.4) {
+                bendClose += result;
+                bendCloseCount += 1.0;
+            }
+
             sum += metaballValue;
         }
     }
 
-    bendClose = bendClose / bendCloseCount;
+    //    bendClose = bendClose / bendCloseCount;
 
     if (bendClose != 0.0) {
         bendClose = (bendClose - 0.4) * (1 / (0.6 - 0.4));
@@ -99,8 +99,8 @@ kernel void
         bendClose = 0.0;
     }
 
+
     float result = step(0.4, sum);
-    result += bendClose * 10;
     result = clamp(result, 0.0, 1.0);
 
     colorSum = colorSum / colorAccumulation;
@@ -108,6 +108,7 @@ kernel void
     if (result > 0.0 && ball < 1.0) {
         colorSum = colorSumLink;
     }
+
 
     colorSum *= result;
 
