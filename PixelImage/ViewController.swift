@@ -23,9 +23,22 @@ class ViewController: UIViewController, MetaballDataSource {
         let recognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
         view.addGestureRecognizer(recognizer)
 
-        let metaballs = [CGPoint(x: 70, y: 70), CGPoint(x: 270, y: 70), CGPoint(x: 270, y: 470), CGPoint(x: 70, y: 470)].map {
-            Metaball(position: $0)
-        }
+        let lowX = screenWidth / 3
+        let highX = screenWidth  - lowX
+        let lowY = screenHeight / 4
+        let highY = screenHeight  - lowY
+        let positions =
+            [CGPoint(x: lowX, y: lowY),
+            CGPoint(x: highX, y: lowY),
+            CGPoint(x: highX, y: highY),
+            CGPoint(x: lowX, y: highY)]
+        let colors =
+            [UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
+            UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
+            UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
+            UIColor(red255: 250, green: 235, blue: 50, alpha: 1.0)]
+        let metaballs = zip(positions, colors).map { Metaball(position: $0.0, color: $0.1) }
+
         metaballGraph = Graph(vertices: metaballs)
         metaballGraph.addEdge(0, 1)
         metaballGraph.addEdge(0, 3)
@@ -103,19 +116,4 @@ class ViewController: UIViewController, MetaballDataSource {
         }
     }
 
-}
-
-class Metaball: UIView {
-
-    init(position: CGPoint) {
-        super.init(frame: CGRect.zero)
-
-        size = CGSize(50)
-        middle = position
-        backgroundColor = UIColor(randomFlatColorOfShadeStyle: .Light)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
 }

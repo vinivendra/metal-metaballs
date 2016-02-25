@@ -179,7 +179,7 @@ class MetalMetaballRenderer {
                     array.append(Float(x))
                     array.append(Float(y))
 
-                    let color = metaball.backgroundColor!
+                    let color = metaball.color
                     let components = color.components
                     array.append(Float(components.red))
                     array.append(Float(components.green))
