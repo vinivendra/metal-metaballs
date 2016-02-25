@@ -18,6 +18,8 @@ class ViewController: UIViewController, MetaballDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = UIColor.whiteColor()
+
         let recognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
         view.addGestureRecognizer(recognizer)
 
@@ -28,18 +30,13 @@ class ViewController: UIViewController, MetaballDataSource {
         metaballGraph.addEdge(0, 1)
         metaballGraph.addEdge(0, 3)
         metaballGraph.addEdge(1, 2)
-        metaballGraph.addEdge(1, 3)
         metaballGraph.addEdge(2, 3)
 
         let border = 20
         let metaballViewFrame = CGRect(x: border / 2, y: border / 2, width: width, height: height)
         renderer = MetalMetaballRenderer(dataSource: self, frame: metaballViewFrame)
         metaballView = renderer.targetView
-
-        let bigView = UIView(frame: CGRect(x: 10, y: 70, width: width + border, height: height + border))
-        bigView.backgroundColor = UIColor.redColor()
-        bigView.addSubview(metaballView)
-        view.addSubview(bigView)
+        view.addSubview(metaballView)
 
         for metaball in metaballs {
             metaballView.addSubview(metaball)

@@ -22,6 +22,7 @@
 		24E1E7F01C67D74300ECF1C4 /* Metal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7EE1C67D74300ECF1C4 /* Metal.swift */; };
 		24E1E7F11C67D74300ECF1C4 /* shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7EF1C67D74300ECF1C4 /* shaders.metal */; };
 		24ED21CD1C6C2397009C40FC /* MetaballDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */; };
+		24FC38341C7F931E0085C04A /* Metaball.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC38331C7F931E0085C04A /* Metaball.swift */; };
 		24FFA86B1C6BA038005ACD60 /* ApproximationOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA84C1C6BA038005ACD60 /* ApproximationOperator.swift */; };
 		24FFA86C1C6BA038005ACD60 /* Collections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA84D1C6BA038005ACD60 /* Collections.swift */; };
 		24FFA86D1C6BA038005ACD60 /* ComparatorChains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA84E1C6BA038005ACD60 /* ComparatorChains.swift */; };
@@ -71,6 +72,7 @@
 		24E1E7EE1C67D74300ECF1C4 /* Metal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metal.swift; sourceTree = "<group>"; };
 		24E1E7EF1C67D74300ECF1C4 /* shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = shaders.metal; sourceTree = "<group>"; };
 		24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaballDataSource.swift; sourceTree = "<group>"; };
+		24FC38331C7F931E0085C04A /* Metaball.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metaball.swift; sourceTree = "<group>"; };
 		24FFA84C1C6BA038005ACD60 /* ApproximationOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApproximationOperator.swift; sourceTree = "<group>"; };
 		24FFA84D1C6BA038005ACD60 /* Collections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collections.swift; sourceTree = "<group>"; };
 		24FFA84E1C6BA038005ACD60 /* ComparatorChains.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComparatorChains.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				24FFA84B1C6BA038005ACD60 /* SwiftSugar */,
 				242686871C63B72A00D62456 /* AppDelegate.swift */,
 				242686891C63B72A00D62456 /* ViewController.swift */,
+				24FC38331C7F931E0085C04A /* Metaball.swift */,
 				24E1E7D61C67C8B200ECF1C4 /* UIKit.swift */,
 				246B0F821C70635D00A71D05 /* UIColor.swift */,
 				24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */,
@@ -383,6 +386,7 @@
 				24FFA8771C6BA038005ACD60 /* ChunkWindowSplit.swift in Sources */,
 				24FFA86F1C6BA038005ACD60 /* NSNumber.swift in Sources */,
 				2461651B1C6DA4F400A913C8 /* Interpolation.swift in Sources */,
+				24FC38341C7F931E0085C04A /* Metaball.swift in Sources */,
 				24FFA8861C6BA038005ACD60 /* TestCommons.swift in Sources */,
 				24FFA8741C6BA038005ACD60 /* SignOperator.swift in Sources */,
 				24FFA8821C6BA038005ACD60 /* ScanReduce.swift in Sources */,
