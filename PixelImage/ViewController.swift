@@ -23,27 +23,25 @@ class ViewController: UIViewController, MetaballDataSource {
         let recognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
         view.addGestureRecognizer(recognizer)
 
-        let lowX = screenWidth / 3
-        let highX = screenWidth  - lowX
-        let lowY = screenHeight / 4
-        let highY = screenHeight  - lowY
-        let positions =
-            [CGPoint(x: lowX, y: lowY),
-            CGPoint(x: highX, y: lowY),
-            CGPoint(x: highX, y: highY),
-            CGPoint(x: lowX, y: highY)]
+        var positions = [CGPoint]()
+        positions.append(CGPoint(x: Double(screenWidth) / 2, y: Double(screenHeight) / 2))
+        for i in 1...5 {
+            let sine = sin(Double(i) * 2 * M_PI / 5)
+            let cosine = cos(Double(i) * 2 * M_PI / 5)
+            positions.append(CGPoint(x: Double(screenWidth) / 2 + sine * 150,
+                                     y: Double(screenHeight) / 2 + cosine * 150))
+        }
+
         let colors =
-            [UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
-            UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
+            [UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
+            UIColor(red255: 250, green: 235, blue: 50, alpha: 1.0),
             UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
-            UIColor(red255: 250, green: 235, blue: 50, alpha: 1.0)]
+            UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
+            UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
+            UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0)]
         let metaballs = zip(positions, colors).map { Metaball(position: $0.0, color: $0.1) }
 
         metaballGraph = Graph(vertices: metaballs)
-        metaballGraph.addEdge(0, 1)
-        metaballGraph.addEdge(0, 3)
-        metaballGraph.addEdge(1, 2)
-        metaballGraph.addEdge(2, 3)
 
         let metaballViewFrame = screenRect
         renderer = MetalMetaballRenderer(dataSource: self, frame: metaballViewFrame)
@@ -54,10 +52,18 @@ class ViewController: UIViewController, MetaballDataSource {
             metaballView.addSubview(metaball)
         }
 
+        addEdge(0, 1)
         addEdge(0, 2)
+        addEdge(0, 3)
+        addEdge(0, 4)
+        addEdge(0, 5)
 
         delay {
+            self.removeEdge(0, 1)
             self.removeEdge(0, 2)
+            self.removeEdge(0, 3)
+            self.removeEdge(0, 4)
+            self.removeEdge(0, 5)
         }
 
         renderer.state = .Running
