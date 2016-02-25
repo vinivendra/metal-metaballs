@@ -45,8 +45,7 @@ class ViewController: UIViewController, MetaballDataSource {
         metaballGraph.addEdge(1, 2)
         metaballGraph.addEdge(2, 3)
 
-        let border = 20
-        let metaballViewFrame = CGRect(x: border / 2, y: border / 2, width: width, height: height)
+        let metaballViewFrame = screenRect
         renderer = MetalMetaballRenderer(dataSource: self, frame: metaballViewFrame)
         metaballView = renderer.targetView
         view.addSubview(metaballView)

@@ -138,3 +138,7 @@ extension UIView {
         }
     }
 }
+
+let screenRect = UIScreen.mainScreen().bounds
+let screenWidth = screenRect.size.width
+let screenHeight = screenRect.size.height
