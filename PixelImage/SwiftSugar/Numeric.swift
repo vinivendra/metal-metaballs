@@ -20,43 +20,54 @@ protocol Numeric: DoubleValuable, Incrementable, Comparable,
     postfix func ++ (inout _: Self) -> Self
 }
 
-protocol FastNumeric: Numeric { }
+protocol FastNumeric: Numeric {}
 
 extension Double: FastNumeric {
     var toDouble: Double {
-        get { return self }
+        get {
+            return self
+        }
     }
 
     static func fromDouble(double: Double) -> Double {
         return double
     }
+
 }
 
 extension Float: FastNumeric {
     var toDouble: Double {
-        get { return Double(self) }
+        get {
+            return Double(self)
+        }
     }
 
     static func fromDouble(double: Double) -> Float {
         return Float(double)
     }
+
 }
 
 extension Int: FastNumeric {
     var toDouble: Double {
-        get { return Double(self) }
+        get {
+            return Double(self)
+        }
     }
 
     static func fromDouble(double: Double) -> Int {
         return Int(double)
     }
+
 }
 
 //
 extension Int {
+
     func times(@noescape block: () throws -> ()) rethrows {
         for _ in 1...self {
             try block()
         }
     }
+
 }

@@ -1,3 +1,5 @@
+// TODO: Unite UIView and CALayer extensions under a common protocol
+
 import UIKit
 
 func - (left: CGPoint, right: CGPoint) -> CGVector {
@@ -31,6 +33,7 @@ extension CGVector {
         dx = dx / norm
         dy = dy / norm
     }
+
 }
 
 extension CGFloat: DoubleValuable {
@@ -42,19 +45,28 @@ extension CGFloat: DoubleValuable {
     static func fromDouble(double: Double) -> CGFloat {
         return CGFloat(double)
     }
+
 }
 
 extension CGFloat: Numeric {}
 
 extension CGRect {
     var x: CGFloat {
-        get { return origin.x }
-        set { origin.x = newValue }
+        get {
+            return origin.x
+        }
+        set {
+            origin.x = newValue
+        }
     }
 
     var y: CGFloat {
-        get { return origin.y }
-        set { origin.y = newValue }
+        get {
+            return origin.y
+        }
+        set {
+            origin.y = newValue
+        }
     }
 }
 
@@ -66,41 +78,142 @@ extension CGSize {
 
 extension UIView {
     var origin: CGPoint {
-        get { return frame.origin }
-        set { frame.origin = newValue }
+        get {
+            return frame.origin
+        }
+        set {
+            frame.origin = newValue
+        }
     }
 
     var size: CGSize {
-        get { return frame.size }
-        set { frame.size = newValue }
+        get {
+            return frame.size
+        }
+        set {
+            frame.size = newValue
+        }
     }
 
     var width: CGFloat {
-        get { return frame.width }
-        set { frame.size = CGSize(width: newValue, height: height) }
+        get {
+            return frame.width
+        }
+        set {
+            frame.size = CGSize(width: newValue, height: height)
+        }
     }
 
     var height: CGFloat {
-        get { return frame.height }
-        set { frame.size = CGSize(width: width, height: newValue) }
+        get {
+            return frame.height
+        }
+        set {
+            frame.size = CGSize(width: width, height: newValue)
+        }
     }
 
     var middle: CGPoint {
         get {
-            return CGPoint(x: origin.x + width/2, y: origin.y + height/2)
+            return CGPoint(x: origin.x + width / 2, y: origin.y + height / 2)
         }
         set {
-            origin = CGPoint(x: newValue.x - width/2, y: newValue.y - height/2)
+            origin = CGPoint(x: newValue.x - width / 2, y: newValue.y - height / 2)
         }
     }
 
     var midX: CGFloat {
-        get { return middle.x }
-        set { middle = CGPoint(x: newValue, y: midY) }
+        get {
+            return middle.x
+        }
+        set {
+            middle = CGPoint(x: newValue, y: midY)
+        }
     }
 
     var midY: CGFloat {
-        get { return middle.y }
-        set { middle = CGPoint(x: midX, y: newValue) }
+        get {
+            return middle.y
+        }
+        set {
+            middle = CGPoint(x: midX, y: newValue)
+        }
     }
+}
+
+extension CALayer {
+    var origin: CGPoint {
+        get {
+            return frame.origin
+        }
+        set {
+            frame.origin = newValue
+        }
+    }
+
+    var size: CGSize {
+        get {
+            return frame.size
+        }
+        set {
+            frame.size = newValue
+        }
+    }
+
+    var width: CGFloat {
+        get {
+            return frame.width
+        }
+        set {
+            frame.size = CGSize(width: newValue, height: height)
+        }
+    }
+
+    var height: CGFloat {
+        get {
+            return frame.height
+        }
+        set {
+            frame.size = CGSize(width: width, height: newValue)
+        }
+    }
+
+    var middle: CGPoint {
+        get {
+            return CGPoint(x: origin.x + width / 2, y: origin.y + height / 2)
+        }
+        set {
+            origin = CGPoint(x: newValue.x - width / 2, y: newValue.y - height / 2)
+        }
+    }
+
+    var midX: CGFloat {
+        get {
+            return middle.x
+        }
+        set {
+            middle = CGPoint(x: newValue, y: midY)
+        }
+    }
+
+    var midY: CGFloat {
+        get {
+            return middle.y
+        }
+        set {
+            middle = CGPoint(x: midX, y: newValue)
+        }
+    }
+}
+
+let screenRect = UIScreen.mainScreen().bounds
+let screenWidth = screenRect.size.width
+let screenHeight = screenRect.size.height
+
+func * <T: Numeric>(vector: CGVector, scalar: T) -> CGVector {
+    return CGVector(dx: vector.dx * CGFloat(scalar.toDouble), dy: vector.dy * CGFloat(scalar.toDouble))
+}
+
+func + (point: CGPoint, vector: CGVector) -> CGPoint {
+    return CGPoint(x: point.x + vector.dx, y: point.y + vector.dy)
 }

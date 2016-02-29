@@ -13,6 +13,7 @@
 		2426868F1C63B72A00D62456 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2426868E1C63B72A00D62456 /* Assets.xcassets */; };
 		242686921C63B72A00D62456 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 242686901C63B72A00D62456 /* LaunchScreen.storyboard */; };
 		2461651B1C6DA4F400A913C8 /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2461651A1C6DA4F400A913C8 /* Interpolation.swift */; };
+		246B0F831C70635D00A71D05 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B0F821C70635D00A71D05 /* UIColor.swift */; };
 		249CF84C1C6D113C008B0C78 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249CF84B1C6D113C008B0C78 /* Matrix.swift */; };
 		24E1E7D71C67C8B200ECF1C4 /* UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7D61C67C8B200ECF1C4 /* UIKit.swift */; };
 		24E1E7E21C67D37F00ECF1C4 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24E1E7E11C67D37F00ECF1C4 /* Metal.framework */; };
@@ -21,6 +22,8 @@
 		24E1E7F01C67D74300ECF1C4 /* Metal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7EE1C67D74300ECF1C4 /* Metal.swift */; };
 		24E1E7F11C67D74300ECF1C4 /* shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 24E1E7EF1C67D74300ECF1C4 /* shaders.metal */; };
 		24ED21CD1C6C2397009C40FC /* MetaballDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */; };
+		24FC38341C7F931E0085C04A /* Metaball.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC38331C7F931E0085C04A /* Metaball.swift */; };
+		24FC38361C7F9ABE0085C04A /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC38351C7F9ABE0085C04A /* Dispatch.swift */; };
 		24FFA86B1C6BA038005ACD60 /* ApproximationOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA84C1C6BA038005ACD60 /* ApproximationOperator.swift */; };
 		24FFA86C1C6BA038005ACD60 /* Collections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA84D1C6BA038005ACD60 /* Collections.swift */; };
 		24FFA86D1C6BA038005ACD60 /* ComparatorChains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA84E1C6BA038005ACD60 /* ComparatorChains.swift */; };
@@ -49,6 +52,7 @@
 		24FFA8841C6BA038005ACD60 /* TakeDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA8681C6BA038005ACD60 /* TakeDrop.swift */; };
 		24FFA8851C6BA038005ACD60 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA8691C6BA038005ACD60 /* Zip.swift */; };
 		24FFA8861C6BA038005ACD60 /* TestCommons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FFA86A1C6BA038005ACD60 /* TestCommons.swift */; };
+		2BF7957B6518CA68241BB2CE /* Pods_PixelImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55F9558B3B267413C3A07A6 /* Pods_PixelImage.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +64,7 @@
 		242686911C63B72A00D62456 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		242686931C63B72A00D62456 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2461651A1C6DA4F400A913C8 /* Interpolation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Interpolation.swift; path = PixelImage/Interpolation.swift; sourceTree = SOURCE_ROOT; };
+		246B0F821C70635D00A71D05 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		249CF84B1C6D113C008B0C78 /* Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		24E1E7D61C67C8B200ECF1C4 /* UIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKit.swift; sourceTree = "<group>"; };
 		24E1E7E11C67D37F00ECF1C4 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
@@ -68,6 +73,8 @@
 		24E1E7EE1C67D74300ECF1C4 /* Metal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metal.swift; sourceTree = "<group>"; };
 		24E1E7EF1C67D74300ECF1C4 /* shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = shaders.metal; sourceTree = "<group>"; };
 		24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaballDataSource.swift; sourceTree = "<group>"; };
+		24FC38331C7F931E0085C04A /* Metaball.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metaball.swift; sourceTree = "<group>"; };
+		24FC38351C7F9ABE0085C04A /* Dispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
 		24FFA84C1C6BA038005ACD60 /* ApproximationOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApproximationOperator.swift; sourceTree = "<group>"; };
 		24FFA84D1C6BA038005ACD60 /* Collections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collections.swift; sourceTree = "<group>"; };
 		24FFA84E1C6BA038005ACD60 /* ComparatorChains.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComparatorChains.swift; sourceTree = "<group>"; };
@@ -96,6 +103,9 @@
 		24FFA8681C6BA038005ACD60 /* TakeDrop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TakeDrop.swift; sourceTree = "<group>"; };
 		24FFA8691C6BA038005ACD60 /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
 		24FFA86A1C6BA038005ACD60 /* TestCommons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestCommons.swift; sourceTree = "<group>"; };
+		B1A755EFC03DA2A172C2B82F /* Pods-PixelImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PixelImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PixelImage/Pods-PixelImage.debug.xcconfig"; sourceTree = "<group>"; };
+		C419D37C90A6BE8B5139806A /* Pods-PixelImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PixelImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-PixelImage/Pods-PixelImage.release.xcconfig"; sourceTree = "<group>"; };
+		C55F9558B3B267413C3A07A6 /* Pods_PixelImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PixelImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +115,7 @@
 			files = (
 				24E1E7E41C67D39300ECF1C4 /* MetalKit.framework in Frameworks */,
 				24E1E7E21C67D37F00ECF1C4 /* Metal.framework in Frameworks */,
+				2BF7957B6518CA68241BB2CE /* Pods_PixelImage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +129,8 @@
 				24E1E7E11C67D37F00ECF1C4 /* Metal.framework */,
 				242686861C63B72A00D62456 /* PixelImage */,
 				242686851C63B72A00D62456 /* Products */,
+				F1933B48ED44BA9FCD7A4A1F /* Pods */,
+				588576572D7A188031904848 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,12 +147,15 @@
 			children = (
 				24FFA84B1C6BA038005ACD60 /* SwiftSugar */,
 				242686871C63B72A00D62456 /* AppDelegate.swift */,
-				242686891C63B72A00D62456 /* ViewController.swift */,
+				24FC38351C7F9ABE0085C04A /* Dispatch.swift */,
 				24E1E7D61C67C8B200ECF1C4 /* UIKit.swift */,
-				24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */,
-				24E1E7EA1C67D70300ECF1C4 /* MetalMetaballRenderer.swift */,
+				246B0F821C70635D00A71D05 /* UIColor.swift */,
+				24FC38331C7F931E0085C04A /* Metaball.swift */,
 				24E1E7EE1C67D74300ECF1C4 /* Metal.swift */,
 				249CF84B1C6D113C008B0C78 /* Matrix.swift */,
+				242686891C63B72A00D62456 /* ViewController.swift */,
+				24ED21CC1C6C2397009C40FC /* MetaballDataSource.swift */,
+				24E1E7EA1C67D70300ECF1C4 /* MetalMetaballRenderer.swift */,
 				24E1E7EF1C67D74300ECF1C4 /* shaders.metal */,
 				2426868B1C63B72A00D62456 /* Main.storyboard */,
 				2426868E1C63B72A00D62456 /* Assets.xcassets */,
@@ -209,6 +225,23 @@
 			path = SwiftSequences;
 			sourceTree = "<group>";
 		};
+		588576572D7A188031904848 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C55F9558B3B267413C3A07A6 /* Pods_PixelImage.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F1933B48ED44BA9FCD7A4A1F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B1A755EFC03DA2A172C2B82F /* Pods-PixelImage.debug.xcconfig */,
+				C419D37C90A6BE8B5139806A /* Pods-PixelImage.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -216,9 +249,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 242686961C63B72A00D62456 /* Build configuration list for PBXNativeTarget "PixelImage" */;
 			buildPhases = (
+				EF55C7246917A184756D93D8 /* Check Pods Manifest.lock */,
 				242686801C63B72A00D62456 /* Sources */,
 				242686811C63B72A00D62456 /* Frameworks */,
 				242686821C63B72A00D62456 /* Resources */,
+				C7A2DF67265A9D17DEFBD193 /* Embed Pods Frameworks */,
+				FADC01F75BFAC01F0260D1C9 /* Copy Pods Resources */,
+				DD0396CE594E3EAC8D18CC6C /* Tailor */,
 			);
 			buildRules = (
 			);
@@ -276,6 +313,68 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		C7A2DF67265A9D17DEFBD193 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PixelImage/Pods-PixelImage-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DD0396CE594E3EAC8D18CC6C /* Tailor */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Tailor;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if hash tailor 2>/dev/null; then\n  tailor --except=function-whitespace,leading-whitespace,constant-k-prefix --max-severity error\nelse\n  echo \"warning: Please install Tailor from https://tailor.sh\"\nfi";
+		};
+		EF55C7246917A184756D93D8 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FADC01F75BFAC01F0260D1C9 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PixelImage/Pods-PixelImage-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		242686801C63B72A00D62456 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -290,6 +389,7 @@
 				24FFA8771C6BA038005ACD60 /* ChunkWindowSplit.swift in Sources */,
 				24FFA86F1C6BA038005ACD60 /* NSNumber.swift in Sources */,
 				2461651B1C6DA4F400A913C8 /* Interpolation.swift in Sources */,
+				24FC38341C7F931E0085C04A /* Metaball.swift in Sources */,
 				24FFA8861C6BA038005ACD60 /* TestCommons.swift in Sources */,
 				24FFA8741C6BA038005ACD60 /* SignOperator.swift in Sources */,
 				24FFA8821C6BA038005ACD60 /* ScanReduce.swift in Sources */,
@@ -297,6 +397,7 @@
 				24FFA8831C6BA038005ACD60 /* Slicing.swift in Sources */,
 				24FFA8721C6BA038005ACD60 /* Sequence.swift in Sources */,
 				24FFA87F1C6BA038005ACD60 /* Iterate.swift in Sources */,
+				24FC38361C7F9ABE0085C04A /* Dispatch.swift in Sources */,
 				24FFA8761C6BA038005ACD60 /* Categorise.swift in Sources */,
 				24FFA86D1C6BA038005ACD60 /* ComparatorChains.swift in Sources */,
 				24FFA8711C6BA038005ACD60 /* PowerOperator.swift in Sources */,
@@ -308,6 +409,7 @@
 				24FFA86E1C6BA038005ACD60 /* Dictionary.swift in Sources */,
 				24FFA87D1C6BA038005ACD60 /* Hopping.swift in Sources */,
 				24E1E7EB1C67D70300ECF1C4 /* MetalMetaballRenderer.swift in Sources */,
+				246B0F831C70635D00A71D05 /* UIColor.swift in Sources */,
 				24FFA87A1C6BA038005ACD60 /* Enumerate.swift in Sources */,
 				242686881C63B72A00D62456 /* AppDelegate.swift in Sources */,
 				24E1E7F01C67D74300ECF1C4 /* Metal.swift in Sources */,
@@ -428,6 +530,7 @@
 		};
 		242686971C63B72A00D62456 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B1A755EFC03DA2A172C2B82F /* Pods-PixelImage.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = PixelImage/Info.plist;
@@ -439,6 +542,7 @@
 		};
 		242686981C63B72A00D62456 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C419D37C90A6BE8B5139806A /* Pods-PixelImage.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = PixelImage/Info.plist;

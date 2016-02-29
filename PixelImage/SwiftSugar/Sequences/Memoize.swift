@@ -7,62 +7,66 @@ protocol MemoizedSequence: LazySequenceType {
         memoizedFunction: (IndexType -> ReturnType))
 }
 
+struct HashMemoizedSequence<IndexType: Hashable, ReturnType>:
+    MemoizedSequence {
 
-struct HashMemoizedSequence <IndexType: Hashable, ReturnType>:
-MemoizedSequence {
+        let memoizedFunction: (IndexType -> ReturnType)
+        let increment: ((inout IndexType) -> Void)
+        let firstIndex: IndexType
 
-    let memoizedFunction: (IndexType -> ReturnType)
-    let increment: ((inout IndexType) -> Void)
-    let firstIndex: IndexType
+        var index: IndexType
 
-    var index: IndexType
+        init(first: IndexType,
+            incrementer: ((inout IndexType) -> Void),
+            memoizedFunction: (IndexType -> ReturnType)) {
 
-    init(first: IndexType,
-        incrementer: ((inout IndexType) -> Void),
-        memoizedFunction: (IndexType -> ReturnType)) {
+                self.firstIndex = first
 
-            self.firstIndex = first
+                self.index = first
+                self.increment = incrementer
+                self.memoizedFunction = memoizedFunction
+        }
 
-            self.index = first
-            self.increment = incrementer
-            self.memoizedFunction = memoizedFunction
-    }
+        init(first: IndexType,
+            incrementer: ((inout IndexType) -> Void),
+            closure: ((IndexType -> ReturnType, IndexType) -> ReturnType)) {
+                let memoizedFunction = memoize(closure)
 
-    init(first: IndexType,
-        incrementer: ((inout IndexType) -> Void),
-        closure: ((IndexType -> ReturnType, IndexType) -> ReturnType)) {
-            let memoizedFunction = memoize(closure)
+                self.init(first: first, incrementer: incrementer,
+                    memoizedFunction: memoizedFunction)
+        }
 
-            self.init(first: first, incrementer: incrementer,
-                memoizedFunction: memoizedFunction)
-    }
+        init(first: IndexType,
+            incrementer: ((inout IndexType) -> Void),
+            function: (IndexType -> ReturnType)) {
 
-    init(first: IndexType,
-        incrementer: ((inout IndexType) -> Void),
-        function: (IndexType -> ReturnType)) {
+                let memoizedFunction = memoize(function)
 
-            let memoizedFunction = memoize(function)
-
-            self.init(first: first, incrementer: incrementer,
-                memoizedFunction: memoizedFunction)
-    }
+                self.init(first: first, incrementer: incrementer,
+                    memoizedFunction: memoizedFunction)
+        }
 }
 
 extension HashMemoizedSequence: GeneratorType {
+
     mutating func next() -> ReturnType? {
         let result = memoizedFunction(index)
         increment(&index)
         return result
     }
+
 }
 
 extension HashMemoizedSequence: LazySequenceType {
+
     func generate() -> HashMemoizedSequence {
         return self
     }
+
 }
 
 extension HashMemoizedSequence where ReturnType: Comparable {
+
     @warn_unused_result
     func contains(element: ReturnType) -> Bool {
         var index = firstIndex
@@ -79,6 +83,7 @@ extension HashMemoizedSequence where ReturnType: Comparable {
             increment(&index)
         }
     }
+
 }
 
 extension HashMemoizedSequence where IndexType: Incrementable {
@@ -104,29 +109,29 @@ extension HashMemoizedSequence where IndexType: Incrementable {
 }
 
 extension HashMemoizedSequence where IndexType: Incrementable,
-    IndexType: IntegerLiteralConvertible {
+IndexType: IntegerLiteralConvertible {
     init(_ closure: ((IndexType -> ReturnType, IndexType) -> ReturnType)) {
-            self.firstIndex = 1
-            self.index = 1
-            self.increment = { (inout index: IndexType) in
-                index++
-            }
-            self.memoizedFunction = memoize(closure)
+        self.firstIndex = 1
+        self.index = 1
+        self.increment = { (inout index: IndexType) in
+            index++
+        }
+        self.memoizedFunction = memoize(closure)
     }
 
     init(_ function: (IndexType -> ReturnType)) {
-            self.firstIndex = 1
-            self.index = 1
-            self.increment = { (inout index: IndexType) in
-                index++
-            }
-            self.memoizedFunction = memoize(function)
+        self.firstIndex = 1
+        self.index = 1
+        self.increment = { (inout index: IndexType) in
+            index++
+        }
+        self.memoizedFunction = memoize(function)
     }
 }
 
-func memoize <H: Hashable, R> (closure: ((H -> R, H) -> R) ) -> (H -> R) {
+func memoize<H: Hashable, R>(closure: ((H -> R, H) -> R)) -> (H -> R) {
 
-    var table = [H : R]()
+    var table = [H: R]()
 
     var auxiliaryFunction: (H -> R)!
     auxiliaryFunction = { index in
@@ -143,9 +148,9 @@ func memoize <H: Hashable, R> (closure: ((H -> R, H) -> R) ) -> (H -> R) {
     return auxiliaryFunction
 }
 
-func memoize <H: Hashable, R> (function: (H -> R) ) -> (H -> R) {
+func memoize<H: Hashable, R>(function: (H -> R)) -> (H -> R) {
 
-    var table = [H : R]()
+    var table = [H: R]()
 
     let result: (H -> R) = { index in
         if let result = table[index] {

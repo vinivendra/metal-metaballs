@@ -1,4 +1,3 @@
-
 import Metal
 
 protocol MetaballDataSource {
@@ -11,4 +10,5 @@ extension MetaballDataSource {
             return metaballGraph.vertices
         }
     }
+
 }

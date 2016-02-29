@@ -1,3 +1,8 @@
 .DS*
 PixelImage.xcodeproj/xcuserdata/*
 PixelImage.xcodeproj/project.xcworkspace/xcuserdata/*
+PixelImage.xcworkspace/xcuserdata/*
+
+Pods/*
+
+
