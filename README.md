@@ -1,4 +1,4 @@
-![Physics simulation](https://raw.githubusercontent.com/vinivendra/metal-metaballs/master/Examples/Animation.gif)
+![Example Animation](https://raw.githubusercontent.com/vinivendra/metal-metaballs/master/Examples/Animation.gif)
 
 # Metal Metaballs
 
