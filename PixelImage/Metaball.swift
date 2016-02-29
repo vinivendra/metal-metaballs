@@ -14,7 +14,7 @@ class Metaball: UIView {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        color = UIColor(randomFlatColorOfShadeStyle: .Light)
+        self.color = UIColor(randomFlatColorOfShadeStyle: .Light)
         super.init(coder: aDecoder)
     }
 }

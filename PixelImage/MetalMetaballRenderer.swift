@@ -2,7 +2,7 @@ import Metal
 import UIKit
 import ChameleonFramework
 
-class MetalMetaballRenderer {
+@objc class MetalMetaballRenderer: NSObject {
 
     typealias TargetView = UIImageView
 
@@ -47,7 +47,7 @@ class MetalMetaballRenderer {
         idleComputeContext = MTLComputeContext(size: targetView.size, texture: texture2)
     }
 
-    func updateTargetView() {
+    internal func updateTargetView() {
 
         let timeout = dispatch_time(DISPATCH_TIME_NOW, 1000000000)
         dispatch_semaphore_wait(semaphore, timeout)
@@ -81,7 +81,7 @@ class MetalMetaballRenderer {
         }
     }
 
-    func renderToContext(computeContext: MTLComputeContext) {
+    internal func renderToContext(computeContext: MTLComputeContext) {
         let width = Int(targetView.width)
         let height = Int(targetView.height)
 
@@ -113,11 +113,11 @@ class MetalMetaballRenderer {
             commandBuffer.commit()
             commandBuffer.waitUntilCompleted()
         } catch _ {
-            print("Error!")
+            assertionFailure()
         }
     }
 
-    func createImageFromContext(computeContext: MTLComputeContext) -> UIImage {
+    internal func createImageFromContext(computeContext: MTLComputeContext) -> UIImage {
         let texture = computeContext.texture
 
         // Get image info
@@ -152,7 +152,7 @@ class MetalMetaballRenderer {
         return image
     }
 
-    func metaballEdgesBuffer() -> MTLBuffer {
+    internal func metaballEdgesBuffer() -> MTLBuffer {
         let floats = dataSource.metaballGraph.adjacencyMatrix.buffer
 
         let bufferLength = floats.count * sizeof(Float)
@@ -162,7 +162,7 @@ class MetalMetaballRenderer {
         return buffer
     }
 
-    func metaballBuffer() -> MTLBuffer {
+    internal func metaballBuffer() -> MTLBuffer {
         // Create Float array for buffer
         // Exclude metaballs far from the view's bounds
         let border: CGFloat = 100

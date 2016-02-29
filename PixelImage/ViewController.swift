@@ -28,8 +28,10 @@ class ViewController: UIViewController, MetaballDataSource {
         for i in 1...5 {
             let sine = sin(Double(i) * 2 * M_PI / 5)
             let cosine = cos(Double(i) * 2 * M_PI / 5)
-            positions.append(CGPoint(x: Double(screenWidth) / 2 + sine * 150,
-                                     y: Double(screenHeight) / 2 + cosine * 150))
+            let radius: Double = 150
+            let x = Double(screenWidth) / 2 + sine * radius
+            let y = Double(screenHeight) / 2 + cosine * radius
+            positions.append(CGPoint(x: x, y: y))
         }
 
         let colors =
@@ -52,18 +54,48 @@ class ViewController: UIViewController, MetaballDataSource {
             metaballView.addSubview(metaball)
         }
 
-        addEdge(0, 1)
-        addEdge(0, 2)
-        addEdge(0, 3)
-        addEdge(0, 4)
-        addEdge(0, 5)
+        delay(1.0) {
+            self.addEdge(0, 1)
+            self.addEdge(0, 2)
+            self.addEdge(0, 3)
+            self.addEdge(0, 4)
+            self.addEdge(0, 5)
+        }
 
-        delay {
+        delay(2.3) {
             self.removeEdge(0, 1)
             self.removeEdge(0, 2)
             self.removeEdge(0, 3)
             self.removeEdge(0, 4)
             self.removeEdge(0, 5)
+        }
+
+        delay(4) {
+            for i in 1...5 {
+                UIView.animateWithDuration(1.0, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
+                    let sine = sin(Double(i) * 2 * M_PI / 5)
+                    let cosine = cos(Double(i) * 2 * M_PI / 5)
+                    let radius: Double = 85
+                    let x = Double(screenWidth) / 2 + sine * radius
+                    let y = Double(screenHeight) / 2 + cosine * radius
+                    let metaball = metaballs[i]
+                    self.animateMetaball(metaball, toPoint: CGPoint(x: x, y: y))
+                    }, completion: nil)
+            }
+        }
+
+        delay(6) { () -> () in
+            for i in 1...5 {
+                UIView.animateWithDuration(1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
+                    let sine = sin(Double(i) * 2 * M_PI / 5)
+                    let cosine = cos(Double(i) * 2 * M_PI / 5)
+                    let radius: Double = 150
+                    let x = Double(screenWidth) / 2 + sine * radius
+                    let y = Double(screenHeight) / 2 + cosine * radius
+                    let metaball = metaballs[i]
+                    self.animateMetaball(metaball, toPoint: CGPoint(x: x, y: y))
+                    }, completion: nil)
+            }
         }
 
         renderer.state = .Running
@@ -75,6 +107,33 @@ class ViewController: UIViewController, MetaballDataSource {
 
     func removeEdge(i: Int, _ j: Int) {
         animateEdge(i, j, fadeIn: false)
+    }
+
+    func animateMetaball(metaball: Metaball, toPoint destination: CGPoint) {
+        let parameters = VertexAnimationParameters(startDate: NSDate(), duration: 1.0, origin: metaball.center, destination: destination, metaball: metaball)
+        NSTimer.scheduledTimerWithTimeInterval(1.0 / 60.0, target: self, selector: "animateMetaballWithTimer:", userInfo: parameters, repeats: true)
+    }
+
+    func animateMetaball(withTimer timer: NSTimer) {
+        guard let userInfo = timer.userInfo as? VertexAnimationParameters else { preconditionFailure() }
+        let (animationStart, duration, origin, destination, metaball) = (userInfo).unpack()
+
+        let now = NSDate()
+        var timeElapsed = Float(now.timeIntervalSinceDate(animationStart))
+
+        if timeElapsed > duration {
+            timer.invalidate()
+            timeElapsed = duration
+        }
+
+        let linearValue = timeElapsed / duration
+        let interpolatedValue = interpolateSmooth(linearValue)
+        print(interpolatedValue)
+
+        let position = origin + ((destination - origin) * interpolatedValue)
+        metaball.center = position
+
+        renderer.state = .Running
     }
 
     func animateEdge(i: Int, _ j: Int, fadeIn: Bool) {
