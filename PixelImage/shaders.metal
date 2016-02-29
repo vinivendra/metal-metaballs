@@ -33,9 +33,9 @@ kernel void
     for (x = 1; x <= numberOfMetaballs; x += 1) {
         metaballData metaball = metaballBuffer[x];
         float2 metaballPosition = float2(metaball.x, metaball.y);
-        float2 vector
-            = float2(metaballPosition.x - gid.x, metaballPosition.y - gid.y);
-        float squaredDistance = dot(vector, vector);
+        float2 vector = float2(metaballPosition.x - gid.x, metaballPosition.y - gid.y);
+        float dotProduct = dot(vector, vector);
+        float squaredDistance = dotProduct > 0 ? dotProduct : 1;
         float realDistance = sqrt(squaredDistance);
         metaballDistances[x - 1] = squaredDistance;
         metaballDirections[x - 1] = vector / realDistance;
@@ -48,7 +48,7 @@ kernel void
 
     for (x = 0; x < numberOfMetaballs; x += 1) {
         float distance1 = metaballDistances[x];
-        float value1 = 2048 / (distance1 + 1);
+        float value1 = 1500 / distance1;
         float2 direction1 = metaballDirections[x];
 
         float colorContribution = 1 / distance1;
@@ -57,7 +57,7 @@ kernel void
 
         for (y = x + 1; y < numberOfMetaballs; y += 1) {
             float distance2 = metaballDistances[y];
-            float value2 = 2048 / (distance2 + 1);
+            float value2 = 1500 / distance2;
             float2 direction2 = metaballDirections[y];
 
             float v = value1 + value2;
@@ -109,8 +109,11 @@ kernel void
         colorSum = colorSumLink;
     }
 
-
     colorSum *= result;
+
+    if (colorSum.r == 0 && colorSum.g == 0 && colorSum.b == 0) {
+        colorSum = float3(1, 1, 1);
+    }
 
     outTexture.write(float4(colorSum.bgr, 1), gid);
 }
