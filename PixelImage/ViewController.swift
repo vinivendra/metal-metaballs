@@ -20,8 +20,9 @@ class ViewController: UIViewController, MetaballDataSource {
 
 		view.backgroundColor = UIColor.white
 
-		let recognizer = UIPanGestureRecognizer(target: self,
-		                                        action: "handlePan:")
+		let recognizer = UIPanGestureRecognizer(
+			target: self,
+			action: #selector(ViewController.handlePan(_:)))
 		view.addGestureRecognizer(recognizer)
 
 		var positions = [CGPoint]()
@@ -29,8 +30,8 @@ class ViewController: UIViewController, MetaballDataSource {
 			x: Double(screenWidth) / 2,
 			y: Double(screenHeight) / 2))
 		for i in 1...5 {
-			let sine = sin(Double(i) * 2 * M_PI / 5)
-			let cosine = cos(Double(i) * 2 * M_PI / 5)
+			let sine = sin(Double(i) * 2 * .pi / 5)
+			let cosine = cos(Double(i) * 2 * .pi / 5)
 			let radius: Double = 150
 			let x = Double(screenWidth) / 2 + sine * radius
 			let y = Double(screenHeight) / 2 + cosine * radius
@@ -81,8 +82,8 @@ class ViewController: UIViewController, MetaballDataSource {
 				UIView.animate(withDuration: 1.0, delay: 0,
 				                           options: UIViewAnimationOptions(),
 				                           animations: { () -> Void in
-					let sine = sin(Double(i) * 2 * M_PI / 5)
-					let cosine = cos(Double(i) * 2 * M_PI / 5)
+					let sine = sin(Double(i) * 2 * .pi / 5)
+					let cosine = cos(Double(i) * 2 * .pi / 5)
 					let radius: Double = 85
 					let x = Double(screenWidth) / 2 + sine * radius
 					let y = Double(screenHeight) / 2 + cosine * radius
@@ -99,8 +100,8 @@ class ViewController: UIViewController, MetaballDataSource {
 				                           initialSpringVelocity: 0,
 				                           options: UIViewAnimationOptions(),
 				                           animations: { () -> Void in
-					let sine = sin(Double(i) * 2 * M_PI / 5)
-					let cosine = cos(Double(i) * 2 * M_PI / 5)
+					let sine = sin(Double(i) * 2 * .pi / 5)
+					let cosine = cos(Double(i) * 2 * .pi / 5)
 					let radius: Double = 150
 					let x = Double(screenWidth) / 2 + sine * radius
 					let y = Double(screenHeight) / 2 + cosine * radius
@@ -130,7 +131,7 @@ class ViewController: UIViewController, MetaballDataSource {
 		Timer.scheduledTimer(
 			timeInterval: 1.0 / 60.0,
 			target: self,
-			selector: "animateMetaballWithTimer:",
+			selector: #selector(ViewController.animateMetaball(withTimer:)),
 			userInfo: parameters,
 			repeats: true)
 	}
@@ -168,7 +169,7 @@ class ViewController: UIViewController, MetaballDataSource {
 		Timer.scheduledTimer(
 			timeInterval: 1.0 / 60.0,
 			target: self,
-			selector: "animateEdgeWithTimer:",
+			selector: #selector(ViewController.animateEdge(withTimer:)),
 			userInfo: parameters,
 			repeats: true)
 	}

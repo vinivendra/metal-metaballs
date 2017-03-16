@@ -58,7 +58,7 @@ import ChameleonFramework
 
     internal func updateTargetView() {
         let timeout = DispatchTime.now() + Double(1000000000) / Double(NSEC_PER_SEC)
-        semaphore.wait(timeout: timeout)
+        _ = semaphore.wait(timeout: timeout)
 
         state = .ending
 
@@ -142,11 +142,6 @@ import ChameleonFramework
         let imageByteCount = width * height * 4
         let bytesPerRow = width * 4
         let region = MTLRegionMake2D(0, 0, width, height)
-
-        // Allocate the buffer if needed
-        if computeContext.imageBuffer == nil {
-            computeContext.imageBuffer = malloc(imageByteCount)
-        }
 
         // Transfer texture info into image buffer
         texture.getBytes(computeContext.imageBuffer,
