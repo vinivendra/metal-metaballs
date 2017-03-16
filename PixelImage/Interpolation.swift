@@ -28,11 +28,6 @@ func createStringKeyframes(_ bounces: Int = 2, elasticity: Double = 1.1, bounceS
     var bounceReach = overreach / (2 ^ Double(bounces - 1))
     var currentBouncePosition: Double = 1.0 + bounceDirection * bounceReach
 
-    print(currentBounceTime)
-    print(bounceDirection)
-    print(bounceReach)
-    print(currentBouncePosition)
-
     keyFrames.append((1.0 - currentBounceTime, currentBouncePosition))
 
     for i in (1..<bounces).reversed() {
@@ -43,11 +38,6 @@ func createStringKeyframes(_ bounces: Int = 2, elasticity: Double = 1.1, bounceS
         currentBouncePosition = 1.0 + bounceDirection * bounceReach
 
         keyFrames.append((1.0 - currentBounceTime, currentBouncePosition))
-
-        print(currentBounceTime)
-        print(bounceDirection)
-        print(bounceReach)
-        print(currentBouncePosition)
     }
 
     keyFrames.append((0, 0))

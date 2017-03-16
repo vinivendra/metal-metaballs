@@ -152,7 +152,6 @@ class ViewController: UIViewController, MetaballDataSource {
 
 		let linearValue = timeElapsed / duration
 		let interpolatedValue = interpolateSmooth(linearValue)
-		print(interpolatedValue)
 
 		let position = origin + ((destination - origin) * interpolatedValue)
 		metaball.center = position
