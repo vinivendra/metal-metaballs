@@ -33,7 +33,8 @@ kernel void
     for (x = 1; x <= numberOfMetaballs; x += 1) {
         metaballData metaball = metaballBuffer[x];
         float2 metaballPosition = float2(metaball.x, metaball.y);
-        float2 vector = float2(metaballPosition.x - gid.x, metaballPosition.y - gid.y);
+        float2 vector = float2(metaballPosition.x - gid.x,
+							   metaballPosition.y - gid.y);
         float dotProduct = dot(vector, vector);
         float squaredDistance = dotProduct > 0 ? dotProduct : 1;
         float realDistance = sqrt(squaredDistance);
