@@ -1,6 +1,12 @@
 import Darwin
 
-infix operator ^ { associativity right precedence 131 }
+precedencegroup PowerPrecedence {
+	higherThan: MultiplicationPrecedence
+	associativity: right
+}
+
+//
+infix operator ^: PowerPrecedence
 
 func ^ <T: DoubleValuable>(left: T, right: T) -> T {
     return T.fromDouble(pow(left.toDouble, right.toDouble))

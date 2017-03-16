@@ -5,7 +5,8 @@ class Metaball: UIView {
 
     var color: UIColor
 
-    init(position: CGPoint, color: UIColor = UIColor(randomFlatColorOfShadeStyle: .Light)) {
+    init(position: CGPoint,
+         color: UIColor = UIColor(randomFlatColorOf: .light)) {
         self.color = color
         super.init(frame: CGRect.zero)
 
@@ -14,23 +15,25 @@ class Metaball: UIView {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        self.color = UIColor(randomFlatColorOfShadeStyle: .Light)
+        self.color = UIColor(randomFlatColorOf: .light)
         super.init(coder: aDecoder)
     }
 }
 
 class EdgeAnimationParameters {
-    let startDate: NSDate
+    let startDate: Date
     let duration: Float
     let fadeIn: Bool
     let i: Int
     let j: Int
 
-    func unpack() -> (startDate: NSDate, duration: Float, fadeIn: Bool, i: Int, j: Int) {
+    func unpack() -> (startDate: Date, duration: Float, fadeIn: Bool,
+		i: Int, j: Int)
+	{
         return (startDate, duration, fadeIn, i, j)
     }
 
-    init(startDate: NSDate, duration: Float, fadeIn: Bool, i: Int, j: Int) {
+    init(startDate: Date, duration: Float, fadeIn: Bool, i: Int, j: Int) {
         self.startDate = startDate
         self.duration = duration
         self.fadeIn = fadeIn
@@ -40,17 +43,21 @@ class EdgeAnimationParameters {
 }
 
 class VertexAnimationParameters {
-    let startDate: NSDate
+    let startDate: Date
     let duration: Float
     let origin: CGPoint
     let destination: CGPoint
     let metaball: Metaball
 
-    func unpack() -> (startDate: NSDate, duration: Float, origin: CGPoint, destination: CGPoint, metaball: Metaball) {
+    func unpack() -> (startDate: Date, duration: Float, origin: CGPoint,
+		destination: CGPoint, metaball: Metaball)
+	{
         return (startDate, duration, origin, destination, metaball)
     }
 
-    init(startDate: NSDate, duration: Float, origin: CGPoint, destination: CGPoint, metaball: Metaball) {
+    init(startDate: Date, duration: Float, origin: CGPoint,
+         destination: CGPoint, metaball: Metaball)
+	{
         self.startDate = startDate
         self.duration = duration
         self.origin = origin
