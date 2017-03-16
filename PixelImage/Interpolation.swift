@@ -1,23 +1,23 @@
 
 import Darwin
 
-func interpolateCubeEaseIn<T: Numeric>(linear: T) -> T {
+func interpolateCubeEaseIn<T: Numeric>(_ linear: T) -> T {
     return linear ^ 3
 }
 
-func interpolateSquareEaseIn<T: Numeric>(linear: T) -> T {
+func interpolateSquareEaseIn<T: Numeric>(_ linear: T) -> T {
     return linear ^ 2
 }
 
-func interpolateSquareEaseOut<T: Numeric>(linear: T) -> T {
+func interpolateSquareEaseOut<T: Numeric>(_ linear: T) -> T {
     return 1 - (1 - linear) * (1 - linear)
 }
 
-func interpolateSmooth<T: Numeric>(linear: T) -> T {
+func interpolateSmooth<T: Numeric>(_ linear: T) -> T {
     return ((linear) * (linear) * (linear) * ((linear) * ((linear) * 6 - 15) + 10))
 }
 
-func createStringKeyframes(bounces: Int = 2, elasticity: Double = 1.1, bounceSpeed: Double) -> [(time: Double, position: Double)] {
+func createStringKeyframes(_ bounces: Int = 2, elasticity: Double = 1.1, bounceSpeed: Double) -> [(time: Double, position: Double)] {
     // Setup keyframes
     var keyFrames: [(time: Double, position: Double)] = [(1, 1)]
 
@@ -35,7 +35,7 @@ func createStringKeyframes(bounces: Int = 2, elasticity: Double = 1.1, bounceSpe
 
     keyFrames.append((1.0 - currentBounceTime, currentBouncePosition))
 
-    for i in (1..<bounces).reverse() {
+    for i in (1..<bounces).reversed() {
         currentBounceTime += overreach / (bounceSpeed ^ Double(i + 1))
         currentBounceTime += overreach / (bounceSpeed ^ Double(i))
         bounceDirection = Double((i % 2) * 2 - 1)
@@ -53,14 +53,14 @@ func createStringKeyframes(bounces: Int = 2, elasticity: Double = 1.1, bounceSpe
     keyFrames.append((0, 0))
 
     var reversed = [(time: Double, position: Double)]()
-    for keyFrame in keyFrames.reverse() {
+    for keyFrame in keyFrames.reversed() {
         reversed.append(keyFrame)
     }
 
     return reversed
 }
 
-func interpolateSpring<T: Numeric>(linear: T, bounces: Int = 2, elasticity: Double = 1.1, bounceSpeed: Double = 1.0) -> T {
+func interpolateSpring<T: Numeric>(_ linear: T, bounces: Int = 2, elasticity: Double = 1.1, bounceSpeed: Double = 1.0) -> T {
     let keyFrames: [(time: Double, position: Double)]
     keyFrames = createStringKeyframes(bounces, elasticity: elasticity, bounceSpeed: bounceSpeed)
 

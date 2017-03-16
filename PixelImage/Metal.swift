@@ -9,13 +9,13 @@ class MTLContext {
     init(device: MTLDevice = MTLCreateSystemDefaultDevice()!) {
         self.device = device
         self.library = device.newDefaultLibrary()!
-        self.commandQueue = device.newCommandQueue()
+        self.commandQueue = device.makeCommandQueue()
     }
 }
 
 class MTLComputeContext {
     var texture: MTLTexture
-    var imageBuffer: UnsafeMutablePointer<Void>
+    var imageBuffer: UnsafeMutableRawPointer
 
     init(size: CGSize, texture: MTLTexture) {
         let width = Int(size.width)
@@ -26,7 +26,7 @@ class MTLComputeContext {
         self.texture = texture
     }
 
-    func updateToSize(size: CGSize, texture: MTLTexture) {
+    func updateToSize(_ size: CGSize, texture: MTLTexture) {
         free(imageBuffer)
 
         let width = Int(size.width)

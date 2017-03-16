@@ -42,7 +42,7 @@ extension CGFloat: DoubleValuable {
         }
     }
 
-    static func fromDouble(double: Double) -> CGFloat {
+    static func fromDouble(_ double: Double) -> CGFloat {
         return CGFloat(double)
     }
 
@@ -206,7 +206,7 @@ extension CALayer {
     }
 }
 
-let screenRect = UIScreen.mainScreen().bounds
+let screenRect = UIScreen.main.bounds
 let screenWidth = screenRect.size.width
 let screenHeight = screenRect.size.height
 

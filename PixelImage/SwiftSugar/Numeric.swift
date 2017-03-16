@@ -1,23 +1,23 @@
 protocol DoubleValuable {
     var toDouble: Double { get }
 
-    static func fromDouble(double: Double) -> Self
+    static func fromDouble(_ double: Double) -> Self
 }
 
 postfix operator ++ { }
 
 protocol Incrementable {
-    postfix func ++ (inout _: Self) -> Self
+    postfix func ++ (_: inout Self) -> Self
 }
 
 protocol Numeric: DoubleValuable, Incrementable, Comparable,
-    IntegerLiteralConvertible {
+    ExpressibleByIntegerLiteral {
 
     @warn_unused_result func / (lhs: Self, rhs: Self) -> Self
     @warn_unused_result func - (lhs: Self, rhs: Self) -> Self
     @warn_unused_result func + (lhs: Self, rhs: Self) -> Self
     @warn_unused_result func * (lhs: Self, rhs: Self) -> Self
-    postfix func ++ (inout _: Self) -> Self
+    postfix func ++ (_: inout Self) -> Self
 }
 
 protocol FastNumeric: Numeric {}
@@ -29,7 +29,7 @@ extension Double: FastNumeric {
         }
     }
 
-    static func fromDouble(double: Double) -> Double {
+    static func fromDouble(_ double: Double) -> Double {
         return double
     }
 
@@ -42,7 +42,7 @@ extension Float: FastNumeric {
         }
     }
 
-    static func fromDouble(double: Double) -> Float {
+    static func fromDouble(_ double: Double) -> Float {
         return Float(double)
     }
 
@@ -55,19 +55,8 @@ extension Int: FastNumeric {
         }
     }
 
-    static func fromDouble(double: Double) -> Int {
+    static func fromDouble(_ double: Double) -> Int {
         return Int(double)
-    }
-
-}
-
-//
-extension Int {
-
-    func times(@noescape block: () throws -> ()) rethrows {
-        for _ in 1...self {
-            try block()
-        }
     }
 
 }
