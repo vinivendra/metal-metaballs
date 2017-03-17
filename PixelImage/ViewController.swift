@@ -1,3 +1,4 @@
+// TODO: Refactor animations out of view controller.
 import UIKit
 
 class ViewController: UIViewController, MetaballDataSource {
@@ -27,14 +28,14 @@ class ViewController: UIViewController, MetaballDataSource {
 
 		var positions = [CGPoint]()
 		positions.append(CGPoint(
-			x: Double(screenWidth) / 2,
-			y: Double(screenHeight) / 2))
+			x: Double(view.width) / 2,
+			y: Double(view.height) / 2))
 		for i in 1...5 {
 			let sine = sin(Double(i) * 2 * .pi / 5)
 			let cosine = cos(Double(i) * 2 * .pi / 5)
 			let radius: Double = 150
-			let x = Double(screenWidth) / 2 + sine * radius
-			let y = Double(screenHeight) / 2 + cosine * radius
+			let x = Double(view.width) / 2 + sine * radius
+			let y = Double(view.height) / 2 + cosine * radius
 			positions.append(CGPoint(x: x, y: y))
 		}
 
@@ -51,7 +52,7 @@ class ViewController: UIViewController, MetaballDataSource {
 
 		metaballGraph = Graph(vertices: metaballs)
 
-		let metaballViewFrame = screenRect
+		let metaballViewFrame = view.bounds
 		renderer = MetalMetaballRenderer(dataSource: self,
 		                                 frame: metaballViewFrame)
 		metaballView = renderer.targetView
@@ -85,8 +86,8 @@ class ViewController: UIViewController, MetaballDataSource {
 					let sine = sin(Double(i) * 2 * .pi / 5)
 					let cosine = cos(Double(i) * 2 * .pi / 5)
 					let radius: Double = 85
-					let x = Double(screenWidth) / 2 + sine * radius
-					let y = Double(screenHeight) / 2 + cosine * radius
+					let x = Double(self.view.width) / 2 + sine * radius
+					let y = Double(self.view.height) / 2 + cosine * radius
 					let metaball = metaballs[i]
 					self.animateMetaball(metaball, toPoint: CGPoint(x: x, y: y))
 					}, completion: nil)
@@ -103,8 +104,8 @@ class ViewController: UIViewController, MetaballDataSource {
 					let sine = sin(Double(i) * 2 * .pi / 5)
 					let cosine = cos(Double(i) * 2 * .pi / 5)
 					let radius: Double = 150
-					let x = Double(screenWidth) / 2 + sine * radius
-					let y = Double(screenHeight) / 2 + cosine * radius
+					let x = Double(self.view.width) / 2 + sine * radius
+					let y = Double(self.view.height) / 2 + cosine * radius
 					let metaball = metaballs[i]
 					self.animateMetaball(metaball, toPoint: CGPoint(x: x, y: y))
 					}, completion: nil)
@@ -190,8 +191,8 @@ class ViewController: UIViewController, MetaballDataSource {
 
 		let linearValue = timeElapsed / duration
 		let interpolatedValue = fadeIn ?
-			interpolateSquareEaseOut(linearValue) :
-			(1 - interpolateSquareEaseIn(linearValue))
+			interpolateEaseOut(linearValue) :
+			(1 - interpolateEaseIn(linearValue))
 
 		metaballGraph.adjacencyMatrix.set(i, j, value: interpolatedValue)
 		metaballGraph.adjacencyMatrix.set(j, i, value: interpolatedValue)

@@ -1,6 +1,7 @@
 import Metal
 import UIKit
 
+// TODO: Rename these classes to avois apple's MTL prefix
 class MTLContext {
     let device: MTLDevice
     let library: MTLLibrary

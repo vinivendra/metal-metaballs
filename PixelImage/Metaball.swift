@@ -10,7 +10,7 @@ class Metaball: UIView {
         self.color = color
         super.init(frame: CGRect.zero)
 
-        size = CGSize(50)
+		size = CGSize(width: 50, height: 50)
         middle = position
     }
 
