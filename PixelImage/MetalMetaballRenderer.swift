@@ -206,8 +206,8 @@ import ChameleonFramework
 			(array, metaball) -> [Float] in
 			var array = array
 
-			let x = CGFloat(metaball.midX)
-			let y = CGFloat(metaball.midY)
+			let x = CGFloat(metaball.position.x)
+			let y = CGFloat(metaball.position.y)
 			if -border < x,
 				x < targetView.width + border,
 				-border < y,

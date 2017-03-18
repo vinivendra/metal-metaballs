@@ -2,7 +2,7 @@ import UIKit
 
 class ViewController: UIViewController, MetaballDataSource {
 
-	var metaballs: [Metaball]!
+	var metaballs: [MTMVertex]!
 
 	var metaballView: UIImageView!
 	var renderer: MetalMetaballRenderer!
@@ -13,7 +13,7 @@ class ViewController: UIViewController, MetaballDataSource {
 	var metaballGraph: MTMGraph!
 	var previousLocation: CGPoint!
 
-	var selectedMetaball: Metaball?
+	var selectedMetaball: MTMVertex?
 
 	let edgeAnimationDuration: Float = 1
 
@@ -48,7 +48,7 @@ class ViewController: UIViewController, MetaballDataSource {
 			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
 			 UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0)]
 		self.metaballs = zip(positions, colors).map {
-			Metaball(position: $0.0, color: $0.1)
+			MTMVertex(position: $0.0, color: $0.1)
 		}
 
 		metaballGraph = MTMGraph(size: metaballs.count)
@@ -58,10 +58,6 @@ class ViewController: UIViewController, MetaballDataSource {
 		                                 frame: metaballViewFrame)
 		metaballView = renderer.targetView
 		view.addSubview(metaballView)
-
-		for metaball in metaballs {
-			metaballView.addSubview(metaball)
-		}
 
 		delay(1.0) {
 			self.addEdge(0, 1)
@@ -124,10 +120,10 @@ class ViewController: UIViewController, MetaballDataSource {
 		animateEdge(i, j, fadeIn: false)
 	}
 
-	func animateMetaball(_ metaball: Metaball, toPoint destination: CGPoint) {
+	func animateMetaball(_ metaball: MTMVertex, toPoint destination: CGPoint) {
 		let parameters = VertexAnimationParameters(startDate: Date(),
 		                                           duration: 1.0,
-		                                           origin: metaball.center,
+		                                           origin: metaball.position,
 		                                           destination: destination,
 		                                           metaball: metaball)
 		Timer.scheduledTimer(
@@ -157,7 +153,7 @@ class ViewController: UIViewController, MetaballDataSource {
 		let interpolatedValue = interpolateSmooth(linearValue)
 
 		let position = origin + ((destination - origin) * interpolatedValue)
-		metaball.center = position
+		metaball.position = position
 
 		renderer.state = .running
 	}
@@ -206,8 +202,8 @@ class ViewController: UIViewController, MetaballDataSource {
 
 		if selectedMetaball == nil {
 			for metaball in metaballs where
-				abs(metaball.midX - location.x) < 50 &&
-					abs(metaball.midY - location.y) < 50
+				abs(metaball.position.x - location.x) < 50 &&
+					abs(metaball.position.y - location.y) < 50
 			{
 				selectedMetaball = metaball
 				break
@@ -216,7 +212,7 @@ class ViewController: UIViewController, MetaballDataSource {
 
 		guard selectedMetaball != nil else { return }
 
-		selectedMetaball?.middle = location
+		selectedMetaball?.position = location
 
 		renderer.state = .running
 

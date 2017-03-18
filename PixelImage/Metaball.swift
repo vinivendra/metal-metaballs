@@ -1,22 +1,16 @@
 
 import UIKit
 
-class Metaball: UIView {
-
+// TODO: MTMVertex should probably be a struct
+// <- Animations refactor
+class MTMVertex {
     var color: UIColor
+	var position: CGPoint
 
     init(position: CGPoint,
          color: UIColor = UIColor(randomFlatColorOf: .light)) {
         self.color = color
-        super.init(frame: CGRect.zero)
-
-		size = CGSize(width: 50, height: 50)
-        middle = position
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        self.color = UIColor(randomFlatColorOf: .light)
-        super.init(coder: aDecoder)
+        self.position = position
     }
 }
 
@@ -47,16 +41,16 @@ class VertexAnimationParameters {
     let duration: Float
     let origin: CGPoint
     let destination: CGPoint
-    let metaball: Metaball
+    let metaball: MTMVertex
 
     func unpack() -> (startDate: Date, duration: Float, origin: CGPoint,
-		destination: CGPoint, metaball: Metaball)
+		destination: CGPoint, metaball: MTMVertex)
 	{
         return (startDate, duration, origin, destination, metaball)
     }
 
     init(startDate: Date, duration: Float, origin: CGPoint,
-         destination: CGPoint, metaball: Metaball)
+         destination: CGPoint, metaball: MTMVertex)
 	{
         self.startDate = startDate
         self.duration = duration
