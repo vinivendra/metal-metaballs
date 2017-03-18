@@ -4,15 +4,15 @@ import ChameleonFramework
 
 @objc class MetalMetaballRenderer: NSObject {
 
-	typealias TargetView = UIImageView
-
-	let targetView: TargetView
+	let targetView: UIImageView
 
 	let metaballGraph: MTMGraph!
 
 	let context = MTLContext()
 	var activeComputeContext: MTLComputeContext? = nil
 	var idleComputeContext: MTLComputeContext? = nil
+
+	internal var bufferSize: (width: Int, height: Int) = (0, 0)
 
 	let semaphore = DispatchSemaphore(value: 2)
 
@@ -33,60 +33,52 @@ import ChameleonFramework
 	}
 
 	init(size: CGSize? = nil) {
-		let size = size ?? CGSize(width: 736, height: 414)
+		self.metaballGraph = MTMGraph()
 
-		let width = Int(ceil(size.width))
-		let height = Int(ceil(size.height))
-
-		var positions = [CGPoint]()
-		positions.append(CGPoint(
-			x: Double(width) / 2,
-			y: Double(height) / 2))
-		for i in 1...5 {
-			let sine = sin(Double(i) * 2 * .pi / 5)
-			let cosine = cos(Double(i) * 2 * .pi / 5)
-			let radius: Double = 150
-			let x = Double(width) / 2 + sine * radius
-			let y = Double(height) / 2 + cosine * radius
-			positions.append(CGPoint(x: x, y: y))
-		}
-		let colors =
-			[UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
-			 UIColor(red255: 250, green: 235, blue: 50, alpha: 1.0),
-			 UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
-			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
-			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
-			 UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0)]
-
-		let vertices = zip(positions, colors).map {
-			MTMVertex(position: $0.0, color: $0.1)
-		}
-
-		self.metaballGraph = MTMGraph(vertices: vertices)
-
-		self.targetView = TargetView(frame: CGRect(origin: .zero, size: size))
+		self.targetView = UIImageView()
 
 		super.init()
 
-		updateSize(to: size)
+		if let size = size {
+			updateSize(to: size)
+		}
 	}
 
 	func updateSize(to newSize: CGSize) {
-		let width = Int(ceil(newSize.width))
-		let height = Int(ceil(newSize.height))
+		updateContextSize(to: (Int(ceil(newSize.width)),
+		                       Int(ceil(newSize.height))))
+	}
+
+	func updateSize(to newSize: (width: Int, height: Int)) {
+		updateContextSize(to: newSize)
+	}
+
+	private func updateContextSize(to newSize: (width: Int, height: Int)) {
+		guard newSize.width > 0, newSize.height > 0 else {
+			self.activeComputeContext = nil
+			self.idleComputeContext = nil
+			return
+		}
+		guard newSize != bufferSize else {
+			return
+		}
+
+		bufferSize = newSize
 
 		let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(
-				pixelFormat: .bgra8Unorm,
-				width: width,
-				height: height,
-				mipmapped: false)
+			pixelFormat: .bgra8Unorm,
+			width: bufferSize.width,
+			height: bufferSize.height,
+			mipmapped: false)
 
 		let texture1 = context.device.makeTexture(descriptor: textureDescriptor)
 		let texture2 = context.device.makeTexture(descriptor: textureDescriptor)
 
-		self.activeComputeContext = MTLComputeContext(size: newSize,
+		self.activeComputeContext = MTLComputeContext(width: newSize.width,
+		                                              height: newSize.height,
 		                                              texture: texture1)
-		self.idleComputeContext = MTLComputeContext(size: newSize,
+		self.idleComputeContext = MTLComputeContext(width: newSize.width,
+		                                            height: newSize.height,
 		                                            texture: texture2)
 	}
 
@@ -127,9 +119,6 @@ import ChameleonFramework
 	}
 
 	internal func renderToContext(_ computeContext: MTLComputeContext) {
-		let width = Int(targetView.width)
-		let height = Int(targetView.height)
-
 		let kernelFunction: MTLFunction?
 		let pipeline: MTLComputePipelineState
 		do {
@@ -142,9 +131,10 @@ import ChameleonFramework
 
 			// Configure info for computing
 			let threadGroupCounts = MTLSizeMake(8, 8, 1)
-			let threadGroups = MTLSizeMake(width / threadGroupCounts.width,
-			                               height / threadGroupCounts.height,
-			                               1)
+			let threadGroups = MTLSizeMake(
+				computeContext.size.width / threadGroupCounts.width,
+				computeContext.size.height / threadGroupCounts.height,
+				1)
 
 			// Send commands to metal and render
 			let commandBuffer = context.commandQueue.makeCommandBuffer()
@@ -173,10 +163,8 @@ import ChameleonFramework
 		let texture = computeContext.texture
 
 		// Get image info
-		let imageSize = CGSize(width: CGFloat(texture.width),
-		                       height: CGFloat(texture.height))
-		let width = Int(imageSize.width)
-		let height = Int(imageSize.height)
+		let width = texture.width
+		let height = texture.height
 		let imageByteCount = width * height * 4
 		let bytesPerRow = width * 4
 		let region = MTLRegionMake2D(0, 0, width, height)

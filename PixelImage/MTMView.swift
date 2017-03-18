@@ -5,6 +5,11 @@ class MTMView: UIView {
 
 	var targetView: UIImageView!
 
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		renderer?.updateSize(to: frame.size)
+	}
+
 	func commonInit(size: CGSize? = nil) {
 		self.renderer = MetalMetaballRenderer(size: size)
 		self.targetView = renderer.targetView

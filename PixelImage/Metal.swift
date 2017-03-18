@@ -16,25 +16,15 @@ class MTLContext {
 class MTLComputeContext {
     var texture: MTLTexture
     var imageBuffer: UnsafeMutableRawPointer
+	var size: (width: Int, height: Int)
 
-    init(size: CGSize, texture: MTLTexture) {
-        let width = Int(size.width)
-        let height = Int(size.height)
+	init(width: Int, height: Int, texture: MTLTexture) {
         let imageByteCount = width * height * 4
         imageBuffer = malloc(imageByteCount)
 
         self.texture = texture
-    }
 
-    func updateToSize(_ size: CGSize, texture: MTLTexture) {
-        free(imageBuffer)
-
-        let width = Int(size.width)
-        let height = Int(size.height)
-        let imageByteCount = width * height * 4
-        imageBuffer = malloc(imageByteCount)
-
-        self.texture = texture
+		self.size = (width, height)
     }
 
     deinit {

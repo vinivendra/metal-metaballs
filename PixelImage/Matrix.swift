@@ -12,6 +12,10 @@ class MTMGraph {
     private(set) var edges: MTMMatrix
 	private(set) var size: Int
 
+	convenience init() {
+		self.init(size: 0)
+	}
+
 	init(size: Int) {
 		self.size = size
 		self.vertices = [MTMVertex](repeating: MTMVertex(), count: size)

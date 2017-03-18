@@ -4,9 +4,6 @@ class ViewController: UIViewController {
 
 	var metaballView: MTMView!
 
-	let width = 350
-	let height = 600
-
 	var previousLocation: CGPoint!
 
 	var selectedMetaball: MTMVertex?
@@ -26,6 +23,33 @@ class ViewController: UIViewController {
 		metaballView = MTMView(frame: view.bounds)
 		view.addSubview(metaballView)
 		view.fillWithSubview(metaballView)
+
+		//
+		var positions = [CGPoint]()
+		positions.append(CGPoint(
+			x: view.width / 2,
+			y: view.height / 2))
+		for i in 1...5 {
+			let sine = sin(Double(i) * 2 * .pi / 5)
+			let cosine = cos(Double(i) * 2 * .pi / 5)
+			let radius: Double = 150
+			let x = Double(view.width) / 2 + sine * radius
+			let y = Double(view.height) / 2 + cosine * radius
+			positions.append(CGPoint(x: x, y: y))
+		}
+		let colors =
+			[UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
+			 UIColor(red255: 250, green: 235, blue: 50, alpha: 1.0),
+			 UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
+			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
+			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
+			 UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0)]
+
+		let vertices = zip(positions, colors).map {
+			MTMVertex(position: $0.0, color: $0.1)
+		}
+
+		metaballView.renderer.metaballGraph.vertices = vertices
 
 		delay(1.0) {
 			self.addEdge(0, 1)
