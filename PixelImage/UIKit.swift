@@ -84,3 +84,18 @@ extension UIView {
         }
     }
 }
+
+
+extension UIView {
+	func fillWithSubview(_ view: UIView, margins: UIEdgeInsets = .zero) {
+		view.translatesAutoresizingMaskIntoConstraints = false
+		self.topAnchor.constraint(equalTo: view.topAnchor,
+		                          constant: margins.top).isActive = true
+		self.bottomAnchor.constraint(equalTo: view.bottomAnchor,
+		                             constant: margins.bottom).isActive = true
+		self.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+		                              constant: margins.left).isActive = true
+		self.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+		                               constant: margins.right).isActive = true
+	}
+}

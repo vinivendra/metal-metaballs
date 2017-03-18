@@ -1,19 +1,6 @@
 
 import UIKit
 
-// TODO: MTMVertex should probably be a struct
-// <- Animations refactor
-class MTMVertex {
-    var color: UIColor
-	var position: CGPoint
-
-    init(position: CGPoint,
-         color: UIColor = UIColor(randomFlatColorOf: .light)) {
-        self.color = color
-        self.position = position
-    }
-}
-
 class EdgeAnimationParameters {
     let startDate: Date
     let duration: Float

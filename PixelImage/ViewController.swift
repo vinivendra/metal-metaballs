@@ -1,16 +1,12 @@
 import UIKit
 
-class ViewController: UIViewController, MetaballDataSource {
+class ViewController: UIViewController {
 
-	var metaballs: [MTMVertex]!
-
-	var metaballView: UIImageView!
-	var renderer: MetalMetaballRenderer!
+	var metaballView: MTMView!
 
 	let width = 350
 	let height = 600
 
-	var metaballGraph: MTMGraph!
 	var previousLocation: CGPoint!
 
 	var selectedMetaball: MTMVertex?
@@ -27,37 +23,9 @@ class ViewController: UIViewController, MetaballDataSource {
 			action: #selector(ViewController.handlePan(_:)))
 		view.addGestureRecognizer(recognizer)
 
-		var positions = [CGPoint]()
-		positions.append(CGPoint(
-			x: Double(view.width) / 2,
-			y: Double(view.height) / 2))
-		for i in 1...5 {
-			let sine = sin(Double(i) * 2 * .pi / 5)
-			let cosine = cos(Double(i) * 2 * .pi / 5)
-			let radius: Double = 150
-			let x = Double(view.width) / 2 + sine * radius
-			let y = Double(view.height) / 2 + cosine * radius
-			positions.append(CGPoint(x: x, y: y))
-		}
-
-		let colors =
-			[UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
-			 UIColor(red255: 250, green: 235, blue: 50, alpha: 1.0),
-			 UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
-			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
-			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
-			 UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0)]
-		self.metaballs = zip(positions, colors).map {
-			MTMVertex(position: $0.0, color: $0.1)
-		}
-
-		metaballGraph = MTMGraph(size: metaballs.count)
-
-		let metaballViewFrame = view.bounds
-		renderer = MetalMetaballRenderer(dataSource: self,
-		                                 frame: metaballViewFrame)
-		metaballView = renderer.targetView
+		metaballView = MTMView(frame: view.bounds)
 		view.addSubview(metaballView)
+		view.fillWithSubview(metaballView)
 
 		delay(1.0) {
 			self.addEdge(0, 1)
@@ -85,7 +53,7 @@ class ViewController: UIViewController, MetaballDataSource {
 								let radius: Double = 85
 								let x = Double(self.view.width) / 2 + sine * radius
 								let y = Double(self.view.height) / 2 + cosine * radius
-								let metaball = self.metaballs[i]
+								let metaball = self.metaballView.renderer.metaballGraph.vertices[i]
 								self.animateMetaball(metaball, toPoint: CGPoint(x: x, y: y))
 				}, completion: nil)
 			}
@@ -103,13 +71,13 @@ class ViewController: UIViewController, MetaballDataSource {
 								let radius: Double = 150
 								let x = Double(self.view.width) / 2 + sine * radius
 								let y = Double(self.view.height) / 2 + cosine * radius
-								let metaball = self.metaballs[i]
+								let metaball = self.metaballView.renderer.metaballGraph.vertices[i]
 								self.animateMetaball(metaball, toPoint: CGPoint(x: x, y: y))
 				}, completion: nil)
 			}
 		}
 
-		renderer.state = .running
+		metaballView.renderer.state = .running
 	}
 
 	func addEdge(_ i: Int, _ j: Int) {
@@ -155,7 +123,7 @@ class ViewController: UIViewController, MetaballDataSource {
 		let position = origin + ((destination - origin) * interpolatedValue)
 		metaball.position = position
 
-		renderer.state = .running
+		metaballView.renderer.state = .running
 	}
 
 	func animateEdge(_ i: Int, _ j: Int, fadeIn: Bool) {
@@ -191,17 +159,17 @@ class ViewController: UIViewController, MetaballDataSource {
 			interpolateEaseOut(linearValue) :
 			(1 - interpolateEaseIn(linearValue))
 
-		metaballGraph.adjacencyMatrix.set(i, j, value: interpolatedValue)
-		metaballGraph.adjacencyMatrix.set(j, i, value: interpolatedValue)
+		metaballView.renderer.metaballGraph.setEdgeValue(i, j, value: interpolatedValue)
+		metaballView.renderer.metaballGraph.setEdgeValue(j, i, value: interpolatedValue)
 
-		renderer.state = .running
+		metaballView.renderer.state = .running
 	}
 
 	func handlePan(_ recognizer: UIPanGestureRecognizer) {
 		let location = recognizer.location(in: metaballView)
 
 		if selectedMetaball == nil {
-			for metaball in metaballs where
+			for metaball in metaballView.renderer.metaballGraph.vertices where
 				abs(metaball.position.x - location.x) < 50 &&
 					abs(metaball.position.y - location.y) < 50
 			{
@@ -214,7 +182,7 @@ class ViewController: UIViewController, MetaballDataSource {
 
 		selectedMetaball?.position = location
 
-		renderer.state = .running
+		metaballView.renderer.state = .running
 
 		if recognizer.state == .ended {
 			selectedMetaball = nil

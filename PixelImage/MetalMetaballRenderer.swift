@@ -8,11 +8,11 @@ import ChameleonFramework
 
 	let targetView: TargetView
 
-	let context = MTLContext()
-	var activeComputeContext: MTLComputeContext
-	var idleComputeContext: MTLComputeContext
+	let metaballGraph: MTMGraph!
 
-	let dataSource: MetaballDataSource
+	let context = MTLContext()
+	var activeComputeContext: MTLComputeContext? = nil
+	var idleComputeContext: MTLComputeContext? = nil
 
 	let semaphore = DispatchSemaphore(value: 2)
 
@@ -32,28 +32,62 @@ import ChameleonFramework
 		}
 	}
 
-	required init(dataSource: MetaballDataSource, frame: CGRect) {
-		self.dataSource = dataSource
+	init(size: CGSize? = nil) {
+		let size = size ?? CGSize(width: 736, height: 414)
 
-		targetView = TargetView(frame: frame)
+		let width = Int(ceil(size.width))
+		let height = Int(ceil(size.height))
 
-		let width = Int(frame.width)
-		let height = Int(frame.height)
-		let textureDescriptor =
-			MTLTextureDescriptor.texture2DDescriptor(
+		var positions = [CGPoint]()
+		positions.append(CGPoint(
+			x: Double(width) / 2,
+			y: Double(height) / 2))
+		for i in 1...5 {
+			let sine = sin(Double(i) * 2 * .pi / 5)
+			let cosine = cos(Double(i) * 2 * .pi / 5)
+			let radius: Double = 150
+			let x = Double(width) / 2 + sine * radius
+			let y = Double(height) / 2 + cosine * radius
+			positions.append(CGPoint(x: x, y: y))
+		}
+		let colors =
+			[UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
+			 UIColor(red255: 250, green: 235, blue: 50, alpha: 1.0),
+			 UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0),
+			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
+			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
+			 UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0)]
+
+		let vertices = zip(positions, colors).map {
+			MTMVertex(position: $0.0, color: $0.1)
+		}
+
+		self.metaballGraph = MTMGraph(vertices: vertices)
+
+		self.targetView = TargetView(frame: CGRect(origin: .zero, size: size))
+
+		super.init()
+
+		updateSize(to: size)
+	}
+
+	func updateSize(to newSize: CGSize) {
+		let width = Int(ceil(newSize.width))
+		let height = Int(ceil(newSize.height))
+
+		let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(
 				pixelFormat: .bgra8Unorm,
 				width: width,
 				height: height,
 				mipmapped: false)
 
-		let texture1 =
-			context.device.makeTexture(descriptor: textureDescriptor)
-		activeComputeContext = MTLComputeContext(size: targetView.size,
-		                                         texture: texture1)
-		let texture2 =
-			context.device.makeTexture(descriptor: textureDescriptor)
-		idleComputeContext = MTLComputeContext(size: targetView.size,
-		                                       texture: texture2)
+		let texture1 = context.device.makeTexture(descriptor: textureDescriptor)
+		let texture2 = context.device.makeTexture(descriptor: textureDescriptor)
+
+		self.activeComputeContext = MTLComputeContext(size: newSize,
+		                                              texture: texture1)
+		self.idleComputeContext = MTLComputeContext(size: newSize,
+		                                            texture: texture2)
 	}
 
 	internal func updateTargetView() {
@@ -65,7 +99,7 @@ import ChameleonFramework
 		let userInteractiveQueue =
 			DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive)
 		userInteractiveQueue.async { () -> Void in
-			let computeContext = self.activeComputeContext
+			guard let computeContext = self.activeComputeContext else { return }
 			swap(&self.activeComputeContext, &self.idleComputeContext)
 
 			// Render graphics to metal texture
@@ -182,7 +216,7 @@ import ChameleonFramework
 	}
 
 	internal func metaballEdgesBuffer() -> MTLBuffer {
-		let floats = dataSource.metaballGraph.adjacencyMatrix.buffer
+		let floats = metaballGraph.edges.buffer
 
 		let bufferLength = floats.count * MemoryLayout<Float>.size
 		let device = context.device
@@ -199,7 +233,7 @@ import ChameleonFramework
 		// FIXME: [#12] Metaballs can't be culled like this, otherwise edges
 		// will disappear
 		let border: CGFloat = 100
-		let metaballs = self.dataSource.metaballs!
+		let metaballs = self.metaballGraph.vertices
 
 		var floats = [Float](repeating: 0, count: 5)
 		floats = metaballs.reduce(floats) {
