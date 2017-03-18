@@ -83,7 +83,9 @@ import ChameleonFramework
 			self.semaphore.signal()
 
 			DispatchQueue.main.async { () -> Void in
-				// FIXME: Race conditions might replace new image with old image
+				// FIXME: [#10] Race conditions might replace new image with old
+				// image
+
 				// Send image to view
 				self.targetView.image = uiimage
 			}
@@ -97,7 +99,7 @@ import ChameleonFramework
 		let kernelFunction: MTLFunction?
 		let pipeline: MTLComputePipelineState
 		do {
-			// FIXME: Should these be stored?
+			// FIXME: [#11] Should these be stored?
 			// Get long-lived objects
 			kernelFunction =
 				context.library.makeFunction(name: "drawMetaballs")
@@ -194,7 +196,8 @@ import ChameleonFramework
 	internal func metaballBuffer() -> MTLBuffer {
 		// Create Float array for buffer
 		// Exclude metaballs far from the view's bounds
-		// FIXME: What happens to edges of metaballs that are far away?
+		// FIXME: [#12] Metaballs can't be culled like this, otherwise edges
+		// will disappear
 		let border: CGFloat = 100
 		let metaballs = self.dataSource.metaballs!
 

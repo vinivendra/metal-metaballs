@@ -1,19 +1,13 @@
 import UIKit
 
-class Graph<T> {
+class MTMGraph {
     var adjacencyMatrix: Matrix
-    var vertices: [T]
 
-    var size: Int {
-        get {
-            return vertices.count
-        }
-    }
+	var size: Int {
+		return adjacencyMatrix.size
+	}
 
-    init(vertices: [T]) {
-        let size = vertices.count
-
-        self.vertices = vertices
+	init(size: Int) {
         self.adjacencyMatrix = Matrix(size: size)
     }
 
@@ -26,7 +20,6 @@ class Graph<T> {
         adjacencyMatrix.reset(i, j)
         adjacencyMatrix.reset(j, i)
     }
-
 }
 
 struct Matrix: CustomStringConvertible {

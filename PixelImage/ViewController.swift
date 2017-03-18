@@ -1,7 +1,8 @@
-// TODO: Refactor animations out of view controller.
 import UIKit
 
 class ViewController: UIViewController, MetaballDataSource {
+
+	var metaballs: [Metaball]!
 
 	var metaballView: UIImageView!
 	var renderer: MetalMetaballRenderer!
@@ -9,7 +10,7 @@ class ViewController: UIViewController, MetaballDataSource {
 	let width = 350
 	let height = 600
 
-	var metaballGraph: Graph<Metaball>!
+	var metaballGraph: MTMGraph!
 	var previousLocation: CGPoint!
 
 	var selectedMetaball: Metaball?
@@ -46,11 +47,11 @@ class ViewController: UIViewController, MetaballDataSource {
 			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
 			 UIColor(red255: 90, green: 170, blue: 170, alpha: 1.0),
 			 UIColor(red255: 110, green: 220, blue: 220, alpha: 1.0)]
-		let metaballs = zip(positions, colors).map {
+		self.metaballs = zip(positions, colors).map {
 			Metaball(position: $0.0, color: $0.1)
 		}
 
-		metaballGraph = Graph(vertices: metaballs)
+		metaballGraph = MTMGraph(size: metaballs.count)
 
 		let metaballViewFrame = view.bounds
 		renderer = MetalMetaballRenderer(dataSource: self,
@@ -81,34 +82,34 @@ class ViewController: UIViewController, MetaballDataSource {
 		delay(4) {
 			for i in 1...5 {
 				UIView.animate(withDuration: 1.0, delay: 0,
-				                           options: UIViewAnimationOptions(),
-				                           animations: { () -> Void in
-					let sine = sin(Double(i) * 2 * .pi / 5)
-					let cosine = cos(Double(i) * 2 * .pi / 5)
-					let radius: Double = 85
-					let x = Double(self.view.width) / 2 + sine * radius
-					let y = Double(self.view.height) / 2 + cosine * radius
-					let metaball = metaballs[i]
-					self.animateMetaball(metaball, toPoint: CGPoint(x: x, y: y))
-					}, completion: nil)
+				               options: UIViewAnimationOptions(),
+				               animations: { () -> Void in
+								let sine = sin(Double(i) * 2 * .pi / 5)
+								let cosine = cos(Double(i) * 2 * .pi / 5)
+								let radius: Double = 85
+								let x = Double(self.view.width) / 2 + sine * radius
+								let y = Double(self.view.height) / 2 + cosine * radius
+								let metaball = self.metaballs[i]
+								self.animateMetaball(metaball, toPoint: CGPoint(x: x, y: y))
+				}, completion: nil)
 			}
 		}
 
 		delay(6) { () -> () in
 			for i in 1...5 {
 				UIView.animate(withDuration: 1.0, delay: 0,
-				                           usingSpringWithDamping: 0.5,
-				                           initialSpringVelocity: 0,
-				                           options: UIViewAnimationOptions(),
-				                           animations: { () -> Void in
-					let sine = sin(Double(i) * 2 * .pi / 5)
-					let cosine = cos(Double(i) * 2 * .pi / 5)
-					let radius: Double = 150
-					let x = Double(self.view.width) / 2 + sine * radius
-					let y = Double(self.view.height) / 2 + cosine * radius
-					let metaball = metaballs[i]
-					self.animateMetaball(metaball, toPoint: CGPoint(x: x, y: y))
-					}, completion: nil)
+				               usingSpringWithDamping: 0.5,
+				               initialSpringVelocity: 0,
+				               options: UIViewAnimationOptions(),
+				               animations: { () -> Void in
+								let sine = sin(Double(i) * 2 * .pi / 5)
+								let cosine = cos(Double(i) * 2 * .pi / 5)
+								let radius: Double = 150
+								let x = Double(self.view.width) / 2 + sine * radius
+								let y = Double(self.view.height) / 2 + cosine * radius
+								let metaball = self.metaballs[i]
+								self.animateMetaball(metaball, toPoint: CGPoint(x: x, y: y))
+				}, completion: nil)
 			}
 		}
 
@@ -223,5 +224,5 @@ class ViewController: UIViewController, MetaballDataSource {
 			selectedMetaball = nil
 		}
 	}
-
+	
 }
